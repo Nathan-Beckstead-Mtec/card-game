@@ -1,0 +1,1 @@
+// "sassy": "node-sass ./src/scss/ --output ./src/css/ | lolcat"
