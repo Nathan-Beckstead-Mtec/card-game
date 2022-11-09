@@ -26,11 +26,26 @@ export default class Card extends React.Component {
         //yes it triggers render twice but it wont display the first to user
         let me = ReactDOM.findDOMNode(this);
         let cont = me.parentNode;
-        console.log(cont);
+        // console.log(cont);
         const ratio = 5 / 7;
         let unit = (Math.min(cont.clientHeight , cont.clientWidth / ratio) / 100).toFixed(4) + "px";
         // this.setState({cssunit: unit});
-        me.style.setProperty("--magic",unit);
+        cont.style.setProperty("--magic",unit);
+
+        function resize(input){
+            // console.log(input);
+            // input[0].contentRect.height
+            // input[0].contentRect.width
+            if (input[0].target == undefined){
+                console.info(input);
+                return;
+            }
+            const ratio = 5 / 7;
+            let unit = (Math.min(input[0].contentRect.height , input[0].contentRect.width / ratio) / 100).toFixed(4) + "px";
+            input[0].target.style.setProperty("--magic",unit);
+        }
+        const scryglass = new ResizeObserver(resize);
+        scryglass.observe(cont);
     }
 
     render() { //required by React.component

@@ -14,10 +14,20 @@
     border: 3px dashed orange;
     padding: 0em;
     margin: 5em;
-    background-color: #ffd;
+    // background-color: #;
     box-shadow: 0 0 1em 0 red;
     display: inline-block;
+    resize: both;
+    overflow: scroll;
 }
+
+.testholders{
+    display: flex;
+    justify-content: flex-start;
+    align-items: flex-start;
+    gap:5em;
+}
+
 
 
 div.card{
@@ -34,14 +44,7 @@ div.card{
     // font-family: "selected", monospace;
     color: col.$paperBlack;
 
-    svg{
-        fill: col.$paperBlack;
-    }
-    object{
-        fill:red !important;
-        color: red !important;
-    }
-
+    --card-rem: calc(10*var(--magic,0.1px));
 
     .card-title{
         display: flex;
@@ -77,10 +80,14 @@ div.card{
     }
     .content{
         // border:2px dashed #00f;
+        
         display: flex;
         justify-content: space-between;
         align-items: flex-end;
         gap: 1em;
+
+
+        width: calc(10em * 5 / 7 - 2 * $edge);
         height: 40%;
         p{
             margin:0;
@@ -89,32 +96,45 @@ div.card{
 
         .stat{
             flex-grow: 0;
-            flex-basis: 20%;
+            // flex-basis: 20%;
             position: relative;
             // border: 2px dashed green;
+            // width: calc(2em * 5 / 7);
+            width:1.75em;
+            height: 100%;
             svg{
-                position: static;
+                position:absolute;
                 left:0;
                 right:0;
-
-                top:auto;
-                bottom:auto;
+                // top: calc(50% - 1em * 5 / 7);
+                bottom:0;
+                fill: col.$paperFaded;
                 
                 width:100%;
+                // width: calc(2 * var(--card-rem));
+
                 height: fit-content;
+                // height: calc(2 * var(--card-rem));
             }
             p{
-                position: static;
-                left:0;
-                right:0;
-                width: 100%;
-
-                top:auto;
-                bottom:auto;
-
                 margin: 0;
                 padding: 0;
-                color: col.$paperRed;
+                
+                position: absolute;
+                left:0;
+                right:0;
+                // width: 100%; redundant set by above
+                bottom:0;
+
+                // height: calc(2* var(--card-rem) * 5 / 7); //aka 100% width
+                height: calc(1.75 * var(--card-rem));
+                line-height: calc(1.5 * var(--card-rem));
+                vertical-align: center; //this is why we bothered setting the height of this box so it matches the icon.
+
+                font-size: 1em; //this is why we used a var above
+
+                text-shadow: 2px 4px 15px #000,0px 0px 15px #000;
+                color: col.$paperRed; //BLOOD!!!
                 font-family: "paint-number",monospace;
             }
         }
