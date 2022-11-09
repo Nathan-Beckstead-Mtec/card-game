@@ -1,42 +1,125 @@
 @use "./_col.scss";
 
+
+@font-face {
+    font-family: paint-number;
+    src: url("../../public/fonts/edo.ttf");
+}
+@font-face {
+    font-family: paint-text;
+    src: url("../../public/fonts/PAINP___.TTF");
+}
+
 .card-holder{
     border: 3px dashed orange;
-    padding: 1em;
-    background-color: #000;
-    box-shadow: inset 0 0 1em 0 red;
+    padding: 0em;
+    margin: 5em;
+    background-color: #ffd;
+    box-shadow: 0 0 1em 0 red;
     display: inline-block;
 }
 
 
 div.card{
+    $edge: 0.25em;
+
     background-color: col.$paperWhite;
     text-align: center;
     display: block;
     font-size: calc(10*var(--magic,0.1px));
+    height: calc(10em - 2 * $edge);
+    width: calc(10em * 5 / 7 - 2 * $edge);
+    padding:$edge;
+
+    // font-family: "selected", monospace;
+    color: col.$paperBlack;
+
+    svg{
+        fill: col.$paperBlack;
+    }
+    object{
+        fill:red !important;
+        color: red !important;
+    }
+
 
     .card-title{
         display: flex;
         justify-content: center;
 
-        border-bottom: 2px solid col.$paperBlack;
+        border-bottom: 5px solid col.$paperBlack;
+        height:16%;
+        font-family: "paint-number",monospace;
     }
     .imgbox{
         position: relative;
+        border-bottom: 5px solid col.$paperBlack;
+        height:40%;
 
         object{
-            object-fit: cover;
+            object-fit:contain;
             height: 100%;
             width:100%;
         }
         .cost{
             position: absolute;
             top:0;
-            right:0;
+            right: 0.25em;
+            display: flex;
+            gap:0.1em;
+
             svg{
+                fill: col.$paperRed;
                 height:1em;
-                width: 1em;
+                width: 0.5em;
             }
+        }
+    }
+    .content{
+        // border:2px dashed #00f;
+        display: flex;
+        justify-content: space-between;
+        align-items: flex-end;
+        gap: 1em;
+        height: 40%;
+        p{
+            margin:0;
+            padding:0;
+        }
+
+        .stat{
+            flex-grow: 0;
+            flex-basis: 20%;
+            position: relative;
+            // border: 2px dashed green;
+            svg{
+                position: static;
+                left:0;
+                right:0;
+
+                top:auto;
+                bottom:auto;
+                
+                width:100%;
+                height: fit-content;
+            }
+            p{
+                position: static;
+                left:0;
+                right:0;
+                width: 100%;
+
+                top:auto;
+                bottom:auto;
+
+                margin: 0;
+                padding: 0;
+                color: col.$paperRed;
+                font-family: "paint-number",monospace;
+            }
+        }
+        .sigils{
+            flex-grow: 1;
         }
     }
 }
