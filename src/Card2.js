@@ -9,9 +9,6 @@ export default class Card extends React.Component {
         //no idea what props is but let it slide
         //props : data passed to constructor
         //state : managed within the componenet
-
-        this.state = {};
-        this.state.id = props.id;
         this.CallbackByeDad = props.CallbackByeDad;
         console.groupCollapsed("card Init");
             console.log("Props:");
@@ -51,16 +48,16 @@ export default class Card extends React.Component {
         //NOT MY TURN
 
     render() { //required by React.component
-
+        let id = this.props.id
         
         return (
             <div className="card2" draggable={true} 
-                onDragStart ={e => this.handler_dragstart(e,this.state.id)}
+                onDragStart ={e => this.handler_dragstart(e,id)}
                 
             >
                 <h4>fake card</h4>
                 <p>to test drag & drop</p>
-                <p>{this.state.id.toString()}</p>
+                <p>{id.toString()}</p>
             </div>
         );
     }

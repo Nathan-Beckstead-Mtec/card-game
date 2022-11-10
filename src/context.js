@@ -1,3 +1,3 @@
 import { createContext } from "react";
 
-export const gamecontext = createContext({cards: undefined, setcard: undefined});
+export const gamecontext = createContext({cards: null, setcard: null});

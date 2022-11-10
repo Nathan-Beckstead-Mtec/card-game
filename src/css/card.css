@@ -30,7 +30,7 @@ https://lospec.com/palette-list/vinik24
   overflow: scroll;
 }
 
-.testholders {
+.testholders-css {
   display: flex;
   justify-content: flex-start;
   align-items: flex-start;

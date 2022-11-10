@@ -7,6 +7,7 @@ import { useContext } from "react";
 
 export default class Cardholder extends React.Component {
 
+    static contextType = gamecontext;
 
     constructor({ children, height = "400px", width = "300px", index}) {
         super();
@@ -16,7 +17,7 @@ export default class Cardholder extends React.Component {
         this.height = height;
         this.width = width;
         this.index = index;
-
+        this.state.heldId = -1;
     }
 
 
@@ -38,7 +39,7 @@ export default class Cardholder extends React.Component {
         e.preventDefault();
         let data = e.dataTransfer.getData("text/plain");
         // thus.setState({ heldId: data });
-        this.mycontext.movecard(thus.index,data);
+        thus.context.movecard(thus.index,data);
 
             console.log("event:");
             console.log(e);
@@ -48,11 +49,14 @@ export default class Cardholder extends React.Component {
     }
 
 
+    componentDidMount() {
+        const context = this.context;
+        console.log(context);
+        //It will get the data from context, and put it into the state.
+        this.setState({ heldId: context.cards[this.index]});
+      }
+
     render() {
-
-        console.log(gamecontext);
-        let heldId = gamecontext.cards[this.index];
-
 
         let card = <></>;
         if(this.state.heldId != null){
