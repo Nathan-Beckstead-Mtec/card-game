@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Card from "./Card2";
 
 import { gamecontext } from "./context";
@@ -18,6 +18,7 @@ export default class Cardholder extends React.Component {
         this.width = width;
         this.index = index;
         this.state.heldId = -1;
+        useEffect(updateContextVars,[this.context]);
     }
 
 
@@ -30,7 +31,7 @@ export default class Cardholder extends React.Component {
         // console.groupEnd("dragOver");
     }
     handler_drop(e,thus) {
-        console.groupCollapsed("drop");
+        console.group("drop");
         
             console.log("this:");
             console.log(this);
@@ -50,11 +51,16 @@ export default class Cardholder extends React.Component {
 
 
     componentDidMount() {
-        const context = this.context;
-        console.log(context);
+        // this.updateContextVars(); //??? redundant?
+    }
+
+    updateContextVars(){
+        console.debug("updated context vars");
+
         //It will get the data from context, and put it into the state.
-        this.setState({ heldId: context.cards[this.index]});
-      }
+        this.setState({ heldId: this.context.cards[this.index]});
+    }
+
 
     render() {
 

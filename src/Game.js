@@ -32,7 +32,7 @@ export default class Game extends React.Component{
             throw Error("Future me: cannot find old location of card with id:"+ id + " (dont use movecard() to add a new card) or (illegal dragged card)");
         }
 
-        thus.setcard_raw(oldindex, null);
+        thus.setcard_raw(oldindex, null, thus);
         thus.setcard_raw(index, id, thus);
 
         function findId(id){
