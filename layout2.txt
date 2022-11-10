@@ -1,0 +1,41 @@
+game(){
+
+
+    attac = {id: func(amount, fromID)}
+    
+    function getTargetsIDs(id){
+        //use gameboard to do some magic
+        return {l: id, c: id, r: id}
+    }
+
+    takeTurn = {id: func()}
+
+
+    Card({id, GlobeSetHealth Globeattac}){
+        const [health, setHealth] = useState(????);
+        const [alive, GodPowers] = useState(false);
+        const [attacPower, setAttacPower] = useState(?????);
+
+        something something useEffect() (health <= 0) then death;
+
+        if (alive){
+            const attacMe = new function((amount, from) => {
+                setHealth(current => current - ammount);
+                if ("spikey" in Sigils){
+                    window.settimeOut( Globeattac(1,getTargetsIDs(id).c), 500); //1 dmg from me;
+                }
+            })
+            attac[id] = attacMe;
+            const myTurn = new function(() => {
+                Globeattac(attacPower,getTargetsIDs(id).c);
+            });
+        }
+
+
+
+    }
+
+
+
+
+}

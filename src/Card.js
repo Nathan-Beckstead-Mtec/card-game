@@ -24,7 +24,13 @@ export default class Card extends React.Component {
     componentDidMount() {
         //fired when we first are inserted into DOM
         //yes it triggers render twice but it wont display the first to user
+
         let me = ReactDOM.findDOMNode(this);
+        //___________________________
+        //|                          |
+        //| SET --MAGIC CSS VARIABLE |
+        //\__________________________/
+
         let cont = me.parentNode;
         // console.log(cont);
         const ratio = 5 / 7;
@@ -46,11 +52,32 @@ export default class Card extends React.Component {
         }
         const scryglass = new ResizeObserver(resize);
         scryglass.observe(cont);
+
+        //___________________________
+        //|                          |
+        //| ADD DRAG EVENT LISTENER  |
+        //\__________________________/
+        
+
+        function handler_dragstart(ev){
+            ev.dataTransfer.setData("text/plain", this.id);
+            ev.dataTransfer.dropEffect = "move";
+        }
+
+        me.addEventListener("dragstart",handler_dragstart);
     }
+
+    
+
+
+    //FIX ME!!!!!
+    //NOT ALL CARDS ARE DRAGGABLE
+        //ENEMY CARDS
+        //NOT MY TURN
 
     render() { //required by React.component
         return (
-            <div className="card">
+            <div className="card" draggable={true}> 
                 <div className="card-title">{this.name}</div>
                 {/* <Cost value={this.cost} /> */}
                 <div className="imgbox">

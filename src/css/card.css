@@ -37,6 +37,15 @@ https://lospec.com/palette-list/vinik24
   gap: 5em;
 }
 
+.card2 {
+  margin: 1em;
+  border: 3px dashed orange;
+}
+.card2 p, .card2 h4 {
+  padding: 0;
+  margin: 0;
+}
+
 div.card {
   background-color: #bda583;
   text-align: center;

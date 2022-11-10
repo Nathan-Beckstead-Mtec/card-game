@@ -1,0 +1,70 @@
+game{
+
+    class card {
+        constructor(){
+            this.health
+            this.attac
+            this.cons
+            this.pic
+            this.sigils = []
+        }
+        attac(target){
+            target.takedmg(this.attac, this);
+        }
+        takedmg(ammount, from){
+            this.health -= ammount;
+            if(this.health <= 0){
+                death();
+            }
+            if ("spikey" in this.sigils && from != undefined){
+                from.takedmg(1, this.alive ? this : undefined);
+            }
+        }
+        turn(){
+            attac();
+            runSigils();
+        }
+        runSigils(){
+            this.sigils.forEach();
+        }
+        death(){
+            this.alive = false;
+        }
+        render(){
+            return(
+                JSXHERE
+            )
+        }
+    }
+
+    cards = {id : card, ...};
+    playfield = {player1: {slot1: id, ...}, player2: {slot1: id, ...}}
+
+    let playfieldJSX =
+    playfield.keys.forEach(player =>{
+        let rowJSX =
+        player.keys.forEach(key => {
+            let cardToRender = cards[playfield[key]];
+            return cardToRender.render();
+
+        })
+        return(
+            <tr>{rowJSX}</tr>
+        )
+    });
+
+    endTurn(){
+        playfield.player1.forEach(id =>{
+            cards[id].turn();
+        })
+    }
+
+    return (
+        <button onClick={endTurn()}>end turn</button>
+        <div className={"gameboard"}>
+            {playfieldJSX}
+        </div>
+    )
+
+
+}

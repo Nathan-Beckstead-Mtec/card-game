@@ -29,6 +29,16 @@
 }
 
 
+.card2{
+    //fake card to test drag and drop
+    margin:1em;
+    border: 3px dashed orange;
+    p,h4{
+        padding:0;
+        margin:0;
+    }
+}
+
 
 div.card{
     $edge: 0.25em;

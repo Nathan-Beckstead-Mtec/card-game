@@ -16,34 +16,34 @@ painp___
 
 */
 
-    // const fontlist = [
-    //     "./stiffbrushjk.otf",
-    //     "./edo.ttf",
-    //     "./PAINP___.TTF"
-    // ];
+    const fontlist = [
+        "./stiffbrushjk.otf",
+        "./edo.ttf",
+        "./PAINP___.TTF"
+    ];
 
 
 
-const fontlist = [
-    "./edo.ttf",
-    "./PAINP___.TTF",
-    "./valium.ttf",
-    "./Travelling.ttf",
-    "./Lovecraft's Diary.ttf",
-    "./Gypsy Curse.ttf",
-    "./fonts.txt",
-    "./floki-Hard.ttf",
-    "./JinxedWizards.ttf",
-    "./Lycanthrope.ttf",
-    "./PixelsRUs.ttf",
-    "./Frank Knows.ttf",
-    "./Runes.ttf",
-    "./MetalMania-Regular.ttf",
-    "./RobotY.ttf",
-    "./Coraline's Cat.ttf",
-    "./October Crow.ttf",
-    "./PixelByzantine.ttf"
-];
+// const fontlist = [
+//     "./edo.ttf",
+//     "./PAINP___.TTF",
+//     "./valium.ttf",
+//     "./Travelling.ttf",
+//     "./Lovecraft's Diary.ttf",
+//     "./Gypsy Curse.ttf",
+//     "./fonts.txt",
+//     "./floki-Hard.ttf",
+//     "./JinxedWizards.ttf",
+//     "./Lycanthrope.ttf",
+//     "./PixelsRUs.ttf",
+//     "./Frank Knows.ttf",
+//     "./Runes.ttf",
+//     "./MetalMania-Regular.ttf",
+//     "./RobotY.ttf",
+//     "./Coraline's Cat.ttf",
+//     "./October Crow.ttf",
+//     "./PixelByzantine.ttf"
+// ];
 
 
 
