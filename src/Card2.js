@@ -2,6 +2,7 @@ import React from "react";
 import ReactDOM from "react-dom";
 import './css/card.css';
 
+let DEBUG = false;
 export default class Card extends React.Component {
     constructor(props){
         super();
@@ -10,11 +11,13 @@ export default class Card extends React.Component {
         //props : data passed to constructor
         //state : managed within the componenet
         this.CallbackByeDad = props.CallbackByeDad;
-        console.groupCollapsed("card Init");
+        if(DEBUG){
+            console.groupCollapsed("card Init");
             console.log("Props:");
             console.log(props);
             console.log(this.state);
-        console.groupEnd("card Init");
+            console.groupEnd("card Init");
+        }
     }
 
 

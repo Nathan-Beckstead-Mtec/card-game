@@ -17,8 +17,7 @@ export default class Cardholder extends React.Component {
         this.height = height;
         this.width = width;
         this.index = index;
-        this.state.heldId = -1;
-        useEffect(updateContextVars,[this.context]);
+        // useEffect(updateContextVars,[context]);
     }
 
 
@@ -49,27 +48,16 @@ export default class Cardholder extends React.Component {
         console.groupEnd("drop");
     }
 
-
-    componentDidMount() {
-        // this.updateContextVars(); //??? redundant?
-    }
-
-    updateContextVars(){
-        console.debug("updated context vars");
-
-        //It will get the data from context, and put it into the state.
-        this.setState({ heldId: this.context.cards[this.index]});
-    }
-
-
     render() {
 
+        let heldTEST = this.context.cards[this.index];
+
         let card = <></>;
-        if(this.state.heldId != null){
-            card = <Card id={this.state.heldId} />
+        if(heldTEST != null){
+            card = <Card id={heldTEST} />
         }
 
-        let droppable = this.state.heldId == null;
+        let droppable = heldTEST == null;
 
         return (
             <div className="card-holder" style={{ height: this.height, width: this.width }}
@@ -77,7 +65,7 @@ export default class Cardholder extends React.Component {
                 onDragOver={droppable ? (this.handler_dragover) : null}
             >
                 {card}
-                <p>holding: {this.state.heldId}</p>
+                <p>holding: {heldTEST}</p>
             </div>
         );
     }

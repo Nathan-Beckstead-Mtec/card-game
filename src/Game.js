@@ -22,14 +22,14 @@ export default class Game extends React.Component{
 
 
         if(thus.state.cards[index] != null){
-            throw Error("Future me: I won't overwrite preexisting card at index:" + index + " with id:"+id);
+            console.error("Future me: I won't overwrite preexisting card at index:" + index + " with id:"+id);
         }
         if(id == null){
-            throw Error("Future me: this might dissappear a card");
+            console.error("Future me: this might dissappear a card");
         }
         let oldindex = findId(id);
         if (oldindex < 0){
-            throw Error("Future me: cannot find old location of card with id:"+ id + " (dont use movecard() to add a new card) or (illegal dragged card)");
+            console.error("Future me: cannot find old location of card with id:"+ id + " (dont use movecard() to add a new card) or (illegal dragged card)");
         }
 
         thus.setcard_raw(oldindex, null, thus);
