@@ -2,22 +2,24 @@ import React from "react";
 import ReactDOM from "react-dom";
 import './css/card.css';
 
+
+import { gamecontext } from "./context";
+import { useContext } from "react";
+
+import Game from "./Game";
+
+
 export default class Card extends React.Component {
+    
+    //confuzing magic that adds this.context
+    static contextType = gamecontext;
+    
     constructor(props){
         super();
 
         //no idea what props is but let it slide
         //props : data passed to constructor
         //state : managed within the componenet
-
-        this.state = {};
-        this.state.health = props.health;
-        this.state.attac  = props.attac;
-        this.name = props.name;
-        this.cost = props.cost;
-        this.state.imgUrl = props.imgUrl;
-        console.table(this.state);
-        this.state.cssunit = "0px";
     }
 
 
@@ -52,22 +54,13 @@ export default class Card extends React.Component {
         }
         const scryglass = new ResizeObserver(resize);
         scryglass.observe(cont);
-
-        //___________________________
-        //|                          |
-        //| ADD DRAG EVENT LISTENER  |
-        //\__________________________/
-        
-
-        function handler_dragstart(ev){
-            ev.dataTransfer.setData("text/plain", this.id);
-            ev.dataTransfer.dropEffect = "move";
-        }
-
-        me.addEventListener("dragstart",handler_dragstart);
     }
 
-    
+    handler_dragstart(e,id){
+        e.dataTransfer.setData("text/plain", id);
+        e.dataTransfer.dropEffect = "move";
+    }
+
 
 
     //FIX ME!!!!!
@@ -76,20 +69,40 @@ export default class Card extends React.Component {
         //NOT MY TURN
 
     render() { //required by React.component
+        let id = this.props.id;
+        let title = this.context.titles[id];
+        let health = this.context.health[id];
+        let attac = this.context.attac[id];
+        let cost = this.context.cost[id];
+
+        let imgUrl = this.context.imgUrl[id];
+        // let svg = this.context.svg[id];
+
+
+        let sigils = this.context.sigils[id];
+        sigils = sigils.map(curr => (<Sigil type={curr}></Sigil>))
+        
+
+
         return (
-            <div className="card" draggable={true}> 
-                <div className="card-title">{this.name}</div>
+            <div className="card"
+                draggable={true}
+                onDragStart ={e => this.handler_dragstart(e,id)}
+                style={{"--id": id}}
+            >
+                <div className="card-title">{title}</div>
                 {/* <Cost value={this.cost} /> */}
                 <div className="imgbox">
-                    <Cost value={this.cost} />
-                    <Pic url={this.state.imgUrl} />
+                    <Cost value={cost} />
+                    <Pic url={imgUrl} />
+                    {/* {svg} */}
                 </div>
                 <div className="content">
-                    <Attac value={this.state.attac} />
+                    <Attac value={attac} />
                     <div className="sigils">
-
+                        {sigils}
                     </div>
-                    <Health value={this.state.health} />
+                    <Health value={health} />
                 </div>
             </div>
         );
@@ -147,4 +160,19 @@ function Cost({value}) {
             {jsx}
         </div>
     );
+}
+
+function Sigil({type}){
+    console.group(type);
+        console.log(Game.cardTemplate);
+        console.log(Game.cardTemplate[type]);
+    let sigObj = Game.cardTemplate[type];
+        console.log(sigObj);
+        console.log(sigObj.imgName);
+    let imgUrl = "./SVG/cards/sigils/" + sigObj.imgName + ".svg";
+        console.log(imgUrl);
+
+
+    console.groupEnd(type);
+    return <object data={imgUrl} type="image/svg+xml"></object>;
 }

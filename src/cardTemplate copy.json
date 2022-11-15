@@ -1,0 +1,190 @@
+{
+    "fisher": {
+        "description": "Can attack under water",
+        "imgName" : "spearfishing"
+    },
+    "diver": {
+        "description": "Submerges durring opponents turn",
+        "imgName": "whale-tail",
+        "imgName": "shark-fin"
+    },
+    "swimmer": {
+        "description": "Attacked by fish",
+        "imgName": "shark-bite"
+    },
+    "fish-trap": {
+        "description": "Kills attacking fish",
+        "subsigils": [
+            "trap",
+            "diver"
+        ],
+        "imgName": "fishing-hook"
+    },
+    "amphibious": {
+        "description": "",
+        "imgName": ""
+    },
+    "peacefull": {
+        "description": "Will not attack unless provokeded",
+        "imgName": "peace-dove"
+    },
+
+
+
+
+    "shrimp": {
+        "cost"   : 0,
+        "attac"  : 0,
+        "health" : 1,
+        "sigils": [
+            "diver"
+        ],
+        "imgName" : "shrimp"
+    },
+    "boat": {
+        "cost"   : 4,
+        "attac"  : 0,
+        "health" : 10,
+        "sigils": [
+            "swimmer",
+            "cardholder"
+        ],
+        "imgName" : ""
+    },
+    "kraken": {
+        "cost"   : 3,
+        "attac"  : 4,
+        "health" : 6,
+        "sigils": [
+            "diver"
+        ],
+        "imgName" : "kraken"
+    },
+    "crab": {
+        "cost"   : 1,
+        "attac"  : 1,
+        "health" : 2,
+        "sigils": [
+            "diver"
+        ],
+        "imgName" : "sad-crab"
+    },
+    "whale": {
+        "cost"   : 3,
+        "attac"  : 1,
+        "health" : 8,
+        "sigils": [
+            "diver",
+            "peacefull"
+        ],
+        "imgName" : "sperm-whale"
+    },
+    "trilobite": {
+        "cost"   : 1,
+        "attac"  : 0,
+        "health" : 3,
+        "sigils": [
+            "diver"
+        ],
+        "imgName" : "trilobite"
+    },
+    "stork": {
+        "cost"   : 2,
+        "attac"  : 2,
+        "health" : 2,
+        "sigils": [
+            "flyer",
+            "fisher"
+        ],
+        "imgName" : "shoebill-stork"
+    },
+    "angler fish": {
+        "cost"   : 2,
+        "attac"  : 2,
+        "health" : 3,
+        "sigils": [
+            "diver"
+        ],
+        "imgName" : "angler-fish"
+    },
+    "ammonite": {
+        "cost"   : 0,
+        "attac"  : 0,
+        "health" : 2,
+        "sigils": [
+            "diver"
+        ],
+        "imgName" : "ammonite"
+    },
+    "octopus": {
+        "cost"   : 1,
+        "attac"  : 2,
+        "health" : 1,
+        "sigils": [
+            "diver"
+        ],
+        "imgName" : "octopus"
+    },
+    "snek": {
+        "cost"   : 2,
+        "attac"  : 4,
+        "health" : 2,
+        "sigils": [
+            "diver"
+        ],
+        "imgName" : "sea-serpent"
+    },
+    "net": {
+        "cost"   : 1,
+        "attac"  : 0,
+        "health" : 1,
+        "sigils": [
+            "fish-trap"
+        ],
+        "imgName" : "fishing-net"
+    },
+    "mine": {
+        "cost"   : 4,
+        "attac"  : 0,
+        "health" : 3,
+        "sigils": [
+            "fish-trap",
+            "exploder"
+        ],
+        "imgName" : ""
+    },
+    "treant": {
+        "cost"   : 2,
+        "attac"  : 2,
+        "health" : 6,
+        "imgName" : "evil-tree"
+    },
+    "": {
+        "cost"   : 0,
+        "attac"  : 0,
+        "health" : 0,
+        "sigils": [
+            "diver"
+        ],
+        "imgName" : ""
+    },
+    "": {
+        "cost"   : 0,
+        "attac"  : 0,
+        "health" : 0,
+        "sigils": [
+            "diver"
+        ],
+        "imgName" : ""
+    },
+    "": {
+        "cost"   : 0,
+        "attac"  : 0,
+        "health" : 0,
+        "sigils": [
+            "diver"
+        ],
+        "imgName" : ""
+    },
+    
+}

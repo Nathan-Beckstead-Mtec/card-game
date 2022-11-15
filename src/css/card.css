@@ -99,6 +99,8 @@ div.card .content p {
   padding: 0;
 }
 div.card .content .stat {
+  width: 20%;
+  flex-basis: 20%;
   flex-grow: 0;
   position: relative;
   width: 1.75em;
@@ -129,7 +131,18 @@ div.card .content .stat p {
   font-family: "paint-number", monospace;
 }
 div.card .content .sigils {
-  flex-grow: 1;
+  flex-basis: 60%;
+  width: 60%;
+  font-size: 6px;
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  align-items: center;
+}
+div.card .content .sigils object[type="image/svg+xml"], div.card .content .sigils svg {
+  display: inline-block;
+  height: 100%;
+  width: 100%;
 }
 
 /*# sourceMappingURL=card.css.map */

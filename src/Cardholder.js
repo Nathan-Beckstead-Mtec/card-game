@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import Card from "./Card2";
+import Card from "./Card";
 
 import { gamecontext } from "./context";
 import { useContext } from "react";
@@ -50,14 +50,14 @@ export default class Cardholder extends React.Component {
 
     render() {
 
-        let heldTEST = this.context.cards[this.index];
+        let heldId = this.context.cards[this.index];
 
         let card = <></>;
-        if(heldTEST != null){
-            card = <Card id={heldTEST} />
+        if(heldId != null){
+            card = <Card id={heldId} />
         }
 
-        let droppable = heldTEST == null;
+        let droppable = heldId == null;
 
         return (
             <div className="card-holder" style={{ height: this.height, width: this.width }}
@@ -65,7 +65,7 @@ export default class Cardholder extends React.Component {
                 onDragOver={droppable ? (this.handler_dragover) : null}
             >
                 {card}
-                <p>holding: {heldTEST}</p>
+                <p>holding: {heldId}</p>
             </div>
         );
     }

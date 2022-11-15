@@ -10,7 +10,6 @@ export default class Card extends React.Component {
         //no idea what props is but let it slide
         //props : data passed to constructor
         //state : managed within the componenet
-        this.CallbackByeDad = props.CallbackByeDad;
         if(DEBUG){
             console.groupCollapsed("card Init");
             console.log("Props:");
