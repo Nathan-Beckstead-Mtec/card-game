@@ -1,0 +1,46 @@
+1:
+create stats in libreExel
+
+2:
+get all the images + sigils in the same folder
+
+3:
+cd into folder
+
+4:
+create an all.txt
+find > all.txt
+exclude "." and "./all.txt"
+
+5:
+run node packIntoObject.js
+this reads the svg of all the files then puts it in a [{svg:(here)}, ...]
+
+5:
+use index.html to find the index of the files used by packIntoObject
+put data into a coulmn in libreExel
+sort by that coulmn acending
+
+
+6:
+copy the non-index coulmns from libreExel into cyberchef (include headers)
+
+run this:
+Split('\\t','#')
+CSV_to_JSON('#','\\r\\n','Array of dictionaries')
+
+
+https://gchq.github.io/CyberChef/#recipe=Split('%5C%5Ct','%23')CSV_to_JSON('%23','%5C%5Cr%5C%5Cn','Array%20of%20dictionaries')
+
+save to stats.json
+
+
+7:run
+node mergejson.js svgobj.json stats.json
+this outputs one merged json file called cardpack.json
+
+
+...
+
+69:
+profit!

@@ -1,0 +1,16 @@
+./wolf2.svg
+./rattlesnek.svg
+./leeching-worm.svg
+./sand-snek.svg
+./bunny.svg
+./elephant.svg
+./leviathan-dogs.svg
+./bison.svg
+./sitting-dog.svg
+./poison-bottle.svg
+./squirrel.svg
+./goat.svg
+./sheep.svg
+./pretty-fangs-svgrepo-com.svg
+./spider.svg
+./foxUwU.svg

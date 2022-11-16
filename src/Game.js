@@ -4,9 +4,31 @@ import Cardholder from "./Cardholder";
 import { gamecontext } from "./context";
 import { useContext } from "react"; //not needed if just providing context
 
+
+
+
 export default class Game extends React.Component {
 
-    static cardTemplate = require("./cardTemplate.json");
+    // static cardTemplate = require("./cardTemplate.json");
+    static LoadCardPack = function (url) {
+        fetch("./" + url).then(data1 => data1.json().then(data => {
+            data.forEach(thing => {
+                Game.Cards[Game.Cards.length] = thing;
+
+                //FREEZE?
+                    // Object.defineProperty(Game.Cards())
+                    // a = {writable: false,enumerable: true,configurable: false, value: thing}
+
+
+                //replace ment is out because it is static (array.concat)
+                //but mutation the manual was is fine;
+            });
+            console.log("loaded cardpack: " + url);
+            console.log(Game.Cards);
+        }));
+    }
+    static Cards = [];
+
 
     constructor() {
         super();
@@ -20,16 +42,21 @@ export default class Game extends React.Component {
         this.cost = {};
         this.sigils = {};
 
-        this.imgUrl = {};
-        this.svg = {};
+        // this.imgUrl = {};
+        this.svgindex = {};
     }
 
 
     testInit() {
+        this.placeNewCard(this.defineNewCard("wolf"), 0);
+        this.placeNewCard(this.defineNewCard("goat"), 1);
+
+
+
         // this.placeNewCard(this.defineNewCard("shrimp"), 0);
         // this.placeNewCard(this.defineNewCard("angler fish"), 0);
-        this.placeNewCard(this.defineNewCard("net"), 0);
-        this.placeNewCard(this.defineNewCard("kraken"), 1);
+        // this.placeNewCard(this.defineNewCard("net"), 0);
+        // this.placeNewCard(this.defineNewCard("kraken"), 1);
         // this.placeNewCard(this.defineNewCard("stork"), 2);
         // this.placeNewCard(this.defineNewCard("octopus"), 2);
         // this.placeNewCard(this.defineNewCard("mine"), 2);
@@ -54,7 +81,8 @@ export default class Game extends React.Component {
     defineNewCard(name) {
         //returns id;
         let id = crypto.randomUUID();
-        let cardObj = Game.cardTemplate[name];
+        let index = Game.Cards.findIndex(iscard => iscard.name === name);
+        let cardObj = Game.Cards[index];
         this.titles[id] = name;
         // this.titles[id] = cardObj.name;
         this.health[id] = cardObj.health;
@@ -63,29 +91,7 @@ export default class Game extends React.Component {
         this.sigils[id] = cardObj.sigils;
 
 
-        this.imgUrl[id] = "./SVG/cards/" + cardObj.imgName + ".svg";
-        if (false && "svg local") {
-            let thus = this;
-            let imgUrl = "./SVG/cards/" + cardObj.imgName + ".svg";
-            let promise = fetch(imgUrl);
-            promise.then((response) => {
-                if (!response.ok) {
-                    throw new Error(`HTTP error: ${response.status}`);
-                }
-                return response.json();
-            })
-                .then((data) => {
-                    console.debug(data);
-                    //   setcardSVG(data,id,thus);
-                })
-                .catch((error) => {
-                    console.error(`Could not get card SVG: ${error}`);
-                });
-            //original ./SVG/squirrel-svgrepo-com.svg
-            function setcardSVG(data, id, thus) {
-                thus.svg[id] = data;
-            }
-        }
+        this.svgindex[id] = index;
 
 
 
@@ -142,8 +148,8 @@ export default class Game extends React.Component {
         providecontext.cost = this.cost;
         providecontext.sigils = this.sigils;
 
-        providecontext.svg = this.svg;
-        providecontext.imgUrl = this.imgUrl;
+        providecontext.svgindex = this.svgindex;
+        // providecontext.imgUrl = this.imgUrl;
         /*
         let title = this.context.titles[id];
         let health = this.context.health[id];
@@ -176,3 +182,5 @@ export default class Game extends React.Component {
     }
 
 }
+
+Game.LoadCardPack("./cardPack.json");

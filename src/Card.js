@@ -75,7 +75,8 @@ export default class Card extends React.Component {
         let attac = this.context.attac[id];
         let cost = this.context.cost[id];
 
-        let imgUrl = this.context.imgUrl[id];
+
+        let svg = Game.Cards[this.context.svgindex[id]].svg;
         // let svg = this.context.svg[id];
 
 
@@ -94,8 +95,8 @@ export default class Card extends React.Component {
                 {/* <Cost value={this.cost} /> */}
                 <div className="imgbox">
                     <Cost value={cost} />
-                    <Pic url={imgUrl} />
-                    {/* {svg} */}
+                    {/* ok because I control the contents of svg an attacker could not without alredy controlling the files served */}
+                    <div dangerouslySetInnerHTML={{ __html: svg}}></div>
                 </div>
                 <div className="content">
                     <Attac value={attac} />
