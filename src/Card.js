@@ -81,7 +81,7 @@ export default class Card extends React.Component {
 
 
         let sigils = this.context.sigils[id];
-        sigils = sigils.map(curr => (<Sigil type={curr}></Sigil>))
+        // sigils = sigils.map(curr => (<Sigil type={curr}></Sigil>))
         
 
 

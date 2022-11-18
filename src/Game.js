@@ -3,6 +3,7 @@ import Cardholder from "./Cardholder";
 
 import { gamecontext } from "./context";
 import { useContext } from "react"; //not needed if just providing context
+import Cardrow from "./Cardrow";
 
 
 
@@ -36,15 +37,23 @@ export default class Game extends React.Component {
 		this.state = {};
 		this.state.cardholders = [null,null,null,null,null,null,null,null];
 
-		this.cardholderOwner = [0,0,0,0,1,1,1,1];
-		this.CardholderType = ["table","table","table","table","table","table","table","table"];
+		this.CardholderProps = [
+			{type: "table", owner: 0},
+			{type: "table", owner: 0},
+			{type: "table", owner: 0},
+			{type: "table", owner: 0},
+			{type: "table", owner: 1},
+			{type: "table", owner: 1},
+			{type: "table", owner: 1},
+			{type: "table", owner: 1}
+		];
 		//"table": the cards that are played
 		//"hand": the cards in the hand
 		this.turn = 0;
 
 		this.playerData = [{name:"bob"}, {name:"alice"}];
 		const testdeck = ["wolf","rattle snek","leech","snek","bunny","elephant","leviathan pup","bison","puppy","venom","Squirrel","goat","sheep","vampirism","spider","fox"];
-		this.deck = [new deck(testdeck), new deck(testdeck)];
+		this.decks = [new deck(testdeck), new deck(testdeck)];
 
 
 		this.titles = {};
@@ -60,20 +69,17 @@ export default class Game extends React.Component {
 
 	testInit() {
 		console.info("button clicked here");
+		// this.placeNewCardInNewCardHolder(this.defineNewCard("puppy"));
+
+		this.placeNewCard(this.defineNewCard(this.decks[this.CardholderProps[0].owner].draw()),0);
+		this.placeNewCard(this.defineNewCard(this.decks[this.CardholderProps[4].owner].draw()),4);
+
+
+
 		// this.placeNewCard(this.defineNewCard("wolf"), this.newcardholder());
 		// this.placeNewCard(this.defineNewCard("goat"), this.newcardholder());
-		this.placeNewCardInNewCardHolder(this.defineNewCard("puppy"));
 
 		// this.newcardholder((newindex) => {console.warn(this);this.placeNewCard(this.defineNewCard("snek"),newindex);});
-
-
-		//debug
-		/*let foxcard = this.defineNewCard("fox");
-		console.log("foxcard: " + foxcard);
-		let cardholderfox = this.newcardholder();
-		console.log("cardholderfox: " + cardholderfox);
-		this.placeNewCard(foxcard,cardholderfox);
-		*/
 	}
 
 
@@ -117,9 +123,9 @@ export default class Game extends React.Component {
 
 
 	placeNewCard(id, index) {
-		console.log("seccond");
-		if (this.state.cardholders[index] == undefined) {
+		if (this.state.cardholders[index] === undefined) {
 			console.error("cannot place card: (id: " + id + ", name: " + this.titles[id] + ") in undefined");
+			console.log(this.state.cardholders);
 			throw Error("cannot place card in undefined");
 			return;
 		}
@@ -237,21 +243,55 @@ export default class Game extends React.Component {
 
 	render() {
 		let providecontext = { cards: this.state.cardholders, movecard: ((a, b) => this.movecard(a, b, this)) };
-		console.debug(this);
-		// console.warn(this.state.cardholders);
-		let cardholderJSX = this.state.cardholders.map((val, index) => <Cardholder index={index} />);
-
 		this.sanitychecker();
 
 
+		// let cardholderJSX = this.state.cardholders.map((val, index) => <Cardholder index={index} />);
+
+
+
+
+		this.CardholderProps.forEach((curr,index) => {curr.index = index;});
+
+		//ghetto Array.group
+		let locations = {};
+		locations.hand1  = this.CardholderProps.filter(curr => curr.type == "hand"  && curr.owner == 1);
+		locations.table1 = this.CardholderProps.filter(curr => curr.type == "table" && curr.owner == 1);
+		locations.table0 = this.CardholderProps.filter(curr => curr.type == "table" && curr.owner == 0);
+		locations.hand0  = this.CardholderProps.filter(curr => curr.type == "hand"  && curr.owner == 0);
+		console.log("Game.locations");
+		console.log(locations);
+
 		return (
-			<div className={"testholders-css"} >
-				<button onClick={() => this.testInit()}>place test Cards</button>
+			<div className="game">
+				<div className="left">
+					<h1>bell</h1>
+					<button onClick={() => this.testInit()}>place test Cards for opponent</button>
+				</div>
 				<gamecontext.Provider value={this.getContextValue()}>
-					{cardholderJSX}
+					<div className="center">
+						<Cardrow data={locations.hand1}  owner={1} type={"hand"}/>
+						<Cardrow data={locations.table1} owner={1} type={"table"}/>
+						<br></br>
+						<Cardrow data={locations.table0} owner={0} type={"table"}/>
+						<Cardrow data={locations.hand0}  owner={0} type={"hand"}/>
+					</div>
 				</gamecontext.Provider>
+				<div className="right">
+					<button onClick={this.drawcard}>draw card tester</button>
+				</div>
 			</div>
 		);
+
+
+		// return (
+		// 	<div className={"testholders-css"} >
+		// 		<button onClick={() => this.testInit()}>place test Cards</button>
+		// 		<gamecontext.Provider value={this.getContextValue()}>
+		// 			{cardholderJSX}
+		// 		</gamecontext.Provider>
+		// 	</div>
+		// );
 	}
 
 }
@@ -315,3 +355,6 @@ class deck{
 		function compare(a, b) {if (a < b) {return -1;}if (a > b) {return 1;}return 0;}
 	}
 }
+
+
+

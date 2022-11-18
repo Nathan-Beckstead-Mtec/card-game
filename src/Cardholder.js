@@ -67,6 +67,7 @@ export default class Cardholder extends React.Component {
             <div className="card-holder" style={{ height: this.height, width: this.width }}
                 onDrop={droppable ? (e => this.handler_drop(e,this)) : null}
                 onDragOver={droppable ? (this.handler_dragover) : null}
+                owner={this.props.owner.toString()}
             >
                 {card}
                 {/* <p>holding: {heldId}</p> */}
