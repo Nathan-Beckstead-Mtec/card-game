@@ -96,7 +96,7 @@ export default class Card extends React.Component {
                 <div className="imgbox">
                     <Cost value={cost} />
                     {/* ok because I control the contents of svg an attacker could not without alredy controlling the files served */}
-                    <div dangerouslySetInnerHTML={{ __html: svg}}></div>
+                    <div className="fullDiv" dangerouslySetInnerHTML={{ __html: svg}}></div>
                 </div>
                 <div className="content">
                     <Attac value={attac} />

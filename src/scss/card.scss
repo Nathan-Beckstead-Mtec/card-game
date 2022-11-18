@@ -10,6 +10,13 @@
     src: url("../../public/fonts/PAINP___.TTF");
 }
 
+.fullDiv{
+    //used by card picture holder
+    height:100%;
+    width: 100%;
+}
+
+
 .card-holder{
     border: 3px dashed orange;
     padding: 0em;
@@ -23,8 +30,10 @@
 
 .testholders-css{
     display: flex;
-    justify-content: flex-start;
+    justify-content: center;
     align-items: flex-start;
+    flex-wrap: wrap;
+
     gap:5em;
 }
 
@@ -69,9 +78,8 @@ div.card{
         border-bottom: 5px solid col.$paperBlack;
         height:40%;
 
-        object{
-            object-fit:contain;
-            height: 100%;
+        .fullDiv > svg{
+            height:100%;
             width:100%;
         }
         .cost{
@@ -81,7 +89,7 @@ div.card{
             display: flex;
             gap:0.1em;
 
-            svg{
+            & > svg{
                 fill: col.$paperRed;
                 height:1em;
                 width: 0.5em;

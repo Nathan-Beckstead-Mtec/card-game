@@ -16,7 +16,9 @@ export default class Cardholder extends React.Component {
         this.kiddos = children; //cough cough if this gets refactored I'll quit
         this.height = height;
         this.width = width;
-        this.index = index;
+        
+        // this.index = index;
+
         // useEffect(updateContextVars,[context]);
     }
 
@@ -39,7 +41,7 @@ export default class Cardholder extends React.Component {
         e.preventDefault();
         let data = e.dataTransfer.getData("text/plain");
         // thus.setState({ heldId: data });
-        thus.context.movecard(thus.index,data);
+        thus.context.movecard(thus.props.index,data);
 
             console.log("event:");
             console.log(e);
@@ -50,7 +52,9 @@ export default class Cardholder extends React.Component {
 
     render() {
 
-        let heldId = this.context.cards[this.index];
+        // let heldId = this.context.cards[this.index];
+        let heldId = this.context.cards[this.props.index];
+        console.log("cardholder with index: " + this.props.index + " is holding: " + heldId);
 
         let card = <></>;
         if(heldId != null){
@@ -65,7 +69,7 @@ export default class Cardholder extends React.Component {
                 onDragOver={droppable ? (this.handler_dragover) : null}
             >
                 {card}
-                <p>holding: {heldId}</p>
+                {/* <p>holding: {heldId}</p> */}
             </div>
         );
     }

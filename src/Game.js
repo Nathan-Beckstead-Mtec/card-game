@@ -34,7 +34,7 @@ export default class Game extends React.Component {
         super();
 
         this.state = {};
-        this.state.cards = [null, null, null, null];
+        this.state.cardholders = [null];
 
         this.titles = {};
         this.health = {};
@@ -48,32 +48,79 @@ export default class Game extends React.Component {
 
 
     testInit() {
-        this.placeNewCard(this.defineNewCard("wolf"), 0);
-        this.placeNewCard(this.defineNewCard("goat"), 1);
+        console.info("button clicked here");
+        // this.placeNewCard(this.defineNewCard("wolf"), this.newcardholder());
+        // this.placeNewCard(this.defineNewCard("goat"), this.newcardholder());
+        this.placeNewCardInNewCardHolder(this.defineNewCard("puppy"));
+
+        // this.newcardholder((newindex) => {console.warn(this);this.placeNewCard(this.defineNewCard("snek"),newindex);});
 
 
+        //debug
+        /*let foxcard = this.defineNewCard("fox");
+        console.log("foxcard: " + foxcard);
+        let cardholderfox = this.newcardholder();
+        console.log("cardholderfox: " + cardholderfox);
+        this.placeNewCard(foxcard,cardholderfox);
+        */
+    }
 
-        // this.placeNewCard(this.defineNewCard("shrimp"), 0);
-        // this.placeNewCard(this.defineNewCard("angler fish"), 0);
-        // this.placeNewCard(this.defineNewCard("net"), 0);
-        // this.placeNewCard(this.defineNewCard("kraken"), 1);
-        // this.placeNewCard(this.defineNewCard("stork"), 2);
-        // this.placeNewCard(this.defineNewCard("octopus"), 2);
-        // this.placeNewCard(this.defineNewCard("mine"), 2);
+
+    newcardholder(callbacknext = () => {}) {
+        //
+        console.info("first");
+        let index;
+        this.setState(curr => {
+            console.info("after first?");
+            console.log("thisone:");
+            console.log(curr);
+            let curopy = Array.from(curr);
+            index = curopy.cardholders.length;
+            curopy.cardholders[index] = null;
+            // console.info("first");
+
+            return {cardholders: curopy};
+        }, callbacknext(index));
+        return;
     }
 
 
 
+    placeNewCardInNewCardHolder(id){
+        this.setState(curr => {
+            console.groupCollapsed("placeNewCardInNewCardHolder");
+                console.log(this.constructor.name);
+                console.log("attempting to place: (id: " + id + ", name: " + this.titles[id] + ")");
+                console.log("internal var:");
+            let cardholdercopy = Array.from(curr.cardholders);
+                console.log(cardholdercopy);
+            let index = cardholdercopy.length;
+                console.log("index:");
+                console.log(index);
+            cardholdercopy[index] = id;
+            console.groupEnd("placeNewCardInNewCardHolder");
+            return {cardholders: cardholdercopy};
+        });
+
+    }
+
+
     placeNewCard(id, index) {
-        if (this.state.cards[index] != null) {
+        console.log("seccond");
+        if (this.state.cardholders[index] == undefined) {
+            console.error("cannot place card: (id: " + id + ", name: " + this.titles[id] + ") in undefined");
+            throw Error("cannot place card in undefined");
+            return;
+        }
+        if (this.state.cardholders[index] != null) {
             console.error("card already exists in index: " + index);
             throw Error("card already exists in index: " + index);
             return;
         }
         this.setState(curr => {
-            let current = curr.cards;
+            let current = Array.from(curr.cardholders);
             current[index] = id;
-            return current;
+            return {cardholders: current};
         });
     }
 
@@ -101,12 +148,13 @@ export default class Game extends React.Component {
 
 
     movecard(index, id, thus) {
-        //moves the card (selected by id) to index of this.state.cards from whereever it was before
+        //moves the card (selected by id) to index of this.state.cardholders from whereever it was before
         //this function is not to create or destroy cards
         //callers: (when a card is dropped onto a cardholder)
 
+        console.info("moving id: " + id + " to index: " + index);
 
-        if (thus.state.cards[index] != null) {
+        if (thus.state.cardholders[index] != null) {
             console.error("Future me: I won't overwrite preexisting card at index:" + index + " with id:" + id);
             return;
         }
@@ -119,27 +167,28 @@ export default class Game extends React.Component {
             console.error("Future me: cannot find old location of card with id:" + id + " (dont use movecard() to add a new card) or (illegal dragged card)");
             return;
         }
+        console.info("...from: " + oldindex);
 
         thus.setcard_raw(oldindex, null, thus);
         thus.setcard_raw(index, id, thus);
 
         function findId(id) {
-            return thus.state.cards.findIndex(a => a == id);
+            return thus.state.cardholders.findIndex(a => a == id);
         }
     }
     setcard_raw(index, id, thus) {
         //this is too much power to call directly
         thus.setState((current) => {
-            let cards_temp = Array.from(current.cards);
+            let cards_temp = Array.from(current.cardholders);
             cards_temp[index] = id;
-            return { cards: cards_temp };
+            return { cardholders: cards_temp };
         });
     }
 
 
     getContextValue() {
 
-        let providecontext = { cards: this.state.cards, movecard: ((a, b) => this.movecard(a, b, this)) };
+        let providecontext = { cards: this.state.cardholders, movecard: ((a, b) => this.movecard(a, b, this)) };
 
 
         providecontext.titles = this.titles;
@@ -161,22 +210,35 @@ export default class Game extends React.Component {
     };
 
 
+    sanitychecker(){
+        console.group("sanity checker");
+            console.groupCollapsed("all cards defined");
+                console.log(this.titles);
+            console.groupEnd("all cards defined");
 
+        Object.keys(this.titles).forEach(key => {
+            let countOfthisKey = this.state.cardholders.reduce((prev,curr) => prev + (curr == key ? 1 : 0), 0);
+            console.assert(countOfthisKey == 1, {key, name: this.titles[key] ,countOfthisKey, errorMsg: (countOfthisKey > 1 ? "this card is in multiple card holders at the same time" : "this card is not in a card holder" ) });
+            console.assert(this.health[key] > 0, {key, name: this.titles[key] , health: this.health[key], errorMsg: "this card shouuld be dead"});
+        });
+        console.groupEnd("sanity checker");
+    }
 
     render() {
-        let providecontext = { cards: this.state.cards, movecard: ((a, b) => this.movecard(a, b, this)) };
+        let providecontext = { cards: this.state.cardholders, movecard: ((a, b) => this.movecard(a, b, this)) };
+        console.debug(this);
+        // console.warn(this.state.cardholders);
+        let cardholderJSX = this.state.cardholders.map((val, index) => <Cardholder index={index} />);
 
+        this.sanitychecker();
 
 
         return (
             <div className={"testholders-css"} >
-                <gamecontext.Provider value={this.getContextValue()}>
-                    <Cardholder index={0} />
-                    <Cardholder index={1} />
-                    <Cardholder index={2} />
-                    <Cardholder index={3} />
-                </gamecontext.Provider>
                 <button onClick={() => this.testInit()}>place test Cards</button>
+                <gamecontext.Provider value={this.getContextValue()}>
+                    {cardholderJSX}
+                </gamecontext.Provider>
             </div>
         );
     }
@@ -184,3 +246,24 @@ export default class Game extends React.Component {
 }
 
 Game.LoadCardPack("./cardPack.json");
+
+
+
+
+
+
+class setStateConductor {
+    constructor(thus){
+        this.thus = thus;
+        this.locked = false;
+        this.running = false;
+        this.queue = [];
+        //functions
+    }
+    enque(func){
+        this.queue.push(func);
+    }
+    next(){
+        this.thus.setState(this.queue.shift().call(),this.next);
+    }
+}

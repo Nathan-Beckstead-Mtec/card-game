@@ -20,6 +20,11 @@ https://lospec.com/palette-list/vinik24
   font-family: paint-text;
   src: url("../../public/fonts/PAINP___.TTF");
 }
+.fullDiv {
+  height: 100%;
+  width: 100%;
+}
+
 .card-holder {
   border: 3px dashed orange;
   padding: 0em;
@@ -32,8 +37,9 @@ https://lospec.com/palette-list/vinik24
 
 .testholders-css {
   display: flex;
-  justify-content: flex-start;
+  justify-content: center;
   align-items: flex-start;
+  flex-wrap: wrap;
   gap: 5em;
 }
 
@@ -69,8 +75,7 @@ div.card .imgbox {
   border-bottom: 5px solid #292418;
   height: 40%;
 }
-div.card .imgbox object {
-  object-fit: contain;
+div.card .imgbox .fullDiv > svg {
   height: 100%;
   width: 100%;
 }
@@ -81,7 +86,7 @@ div.card .imgbox .cost {
   display: flex;
   gap: 0.1em;
 }
-div.card .imgbox .cost svg {
+div.card .imgbox .cost > svg {
   fill: #a53030;
   height: 1em;
   width: 0.5em;
