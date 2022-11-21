@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import ReactDOM from "react-dom";
 import Card from "./Card";
 
 import { gamecontext } from "./context";
@@ -21,6 +22,34 @@ export default class Cardholder extends React.Component {
 
         // useEffect(updateContextVars,[context]);
     }
+
+
+    componentDidMount(){
+        let me = ReactDOM.findDOMNode(this);
+
+        let cont = me.parentNode;
+        // console.log(cont);
+        const ratio = 5 / 7;
+        // let unit = (Math.min(cont.clientHeight , cont.clientWidth / ratio) / 100).toFixed(4) + "px";
+        let height = (me.clientWidth / ratio ).toFixed(4) + "px";
+        // this.setState({cssunit: unit});
+        me.style.setProperty("height",height);
+
+        function resize(input, ratio){
+            // console.log(input);
+            // input[0].contentRect.height
+            // input[0].contentRect.width
+            if (input[0].target == undefined){
+                console.info(input);
+                return;
+            }
+            let height = (input[0].contentRect.width / ratio ).toFixed(4) + "px";
+            me.style.setProperty("height",height);
+        }
+        const scryglass = new ResizeObserver((e) => resize(e,ratio));
+        scryglass.observe(me);
+    }
+
 
 
     handler_dragover(e) {
@@ -63,8 +92,10 @@ export default class Cardholder extends React.Component {
 
         let droppable = heldId == null;
 
+
+        //style={{ height: this.height, width: this.width }}
         return (
-            <div className="card-holder" style={{ height: this.height, width: this.width }}
+            <div className="card-holder" 
                 onDrop={droppable ? (e => this.handler_drop(e,this)) : null}
                 onDragOver={droppable ? (this.handler_dragover) : null}
                 owner={this.props.owner.toString()}

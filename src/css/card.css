@@ -25,83 +25,6 @@ https://lospec.com/palette-list/vinik24
   width: 100%;
 }
 
-.card-holder {
-  border: 3px dashed orange;
-  padding: 0em;
-  margin: 0.5em;
-  box-shadow: 0 0 1em 0 var(--box-shadow-col), 0 0 0 0 #000;
-  display: inline-block;
-  resize: both;
-  overflow: scroll;
-}
-.card-holder[owner="1"] {
-  --box-shadow-col: red;
-  border-color: orange;
-}
-.card-holder[owner="0"] {
-  border-color: purple;
-  --box-shadow-col: blue;
-}
-
-div[animations=true] .card-holder {
-  box-shadow: 0 0 1em 0 var(--box-shadow-col), 0 0 0 0 #000;
-}
-div[animations=true] .card-holder[owner="1"] {
-  --box-shadow-col: red;
-  animation-delay: 0;
-  animation-duration: 1s;
-  animation-fill-mode: both;
-  animation-name: unrotate;
-}
-div[animations=true] .card-holder[owner="1"]:hover {
-  animation-name: rotate;
-}
-div[animations=true] .card-holder[owner="0"] {
-  --box-shadow-col: blue;
-}
-
-@keyframes rotate {
-  from {
-    z-index: unset;
-    transform: rotate(180deg);
-    box-shadow: 0 0 1em 0 var(--box-shadow-col), 0 0 0 0 #000;
-  }
-  20% {
-    z-index: 1;
-    transform: rotate(180deg);
-    box-shadow: 0 0 3em 0 var(--box-shadow-col), 0 0 1em 0 #000;
-  }
-  to {
-    z-index: 1;
-    transform: rotate(0deg);
-    box-shadow: 0 0 3em 0 var(--box-shadow-col), 0 0 1em 0 #000;
-  }
-}
-@keyframes unrotate {
-  to {
-    z-index: unset;
-    transform: rotate(180deg);
-    box-shadow: 0 0 1em 0 var(--box-shadow-col), 0 0 0 0 #000;
-  }
-  80% {
-    z-index: 1;
-    transform: rotate(180deg);
-    box-shadow: 0 0 3em 0 var(--box-shadow-col), 0 0 1em 0 #000;
-  }
-  from {
-    z-index: 1;
-    transform: rotate(0deg);
-    box-shadow: 0 0 3em 0 var(--box-shadow-col), 0 0 1em 0 #000;
-  }
-}
-.testholders-css {
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 5em;
-}
-
 .card2 {
   margin: 1em;
   border: 3px dashed orange;
@@ -197,16 +120,42 @@ div.card .content .stat p {
 div.card .content .sigils {
   flex-basis: 60%;
   width: 60%;
-  font-size: 6px;
   display: flex;
   justify-content: space-around;
   flex-wrap: wrap;
   align-items: center;
 }
-div.card .content .sigils object[type="image/svg+xml"], div.card .content .sigils svg {
+div.card .content .sigils .sigil {
+  position: relative;
+}
+div.card .content .sigils .sigil svg {
   display: inline-block;
   height: 100%;
   width: 100%;
+}
+div.card .content .sigils .sigil .tooltip {
+  position: absolute;
+  top: 90%;
+  left: 10%;
+  width: 40ch;
+  text-align: left;
+  font-size: 1rem;
+  z-index: 3;
+  padding: 0.5em;
+  background-color: #cdba94;
+  color: #524839;
+  border: 10px solid #73654a;
+  display: none;
+  border-radius: 10px;
+}
+div.card .content .sigils .sigil .tooltip .title {
+  font-family: "paint-number", serif;
+  text-decoration: #a53030 underline;
+  text-decoration-thickness: 2px;
+  font-weight: 600;
+}
+div.card .content .sigils .sigil div:hover ~ .tooltip, div.card .content .sigils .sigil .tooltip:hover {
+  display: block;
 }
 
 /*# sourceMappingURL=card.css.map */

@@ -81,8 +81,12 @@ export default class Card extends React.Component {
 
 
         let sigils = this.context.sigils[id];
-        // sigils = sigils.map(curr => (<Sigil type={curr}></Sigil>))
-        
+        if (sigils == undefined){
+            sigils = <></>;
+        }else{
+            sigils = sigils.map((curr,index) => (<Sigil data={curr} id={id + "-sigil-" + index.toString()}></Sigil>))
+        }
+
 
 
         return (
@@ -163,17 +167,28 @@ function Cost({value}) {
     );
 }
 
-function Sigil({type}){
-    console.group(type);
-        console.log(Game.cardTemplate);
-        console.log(Game.cardTemplate[type]);
-    let sigObj = Game.cardTemplate[type];
-        console.log(sigObj);
-        console.log(sigObj.imgName);
-    let imgUrl = "./SVG/cards/sigils/" + sigObj.imgName + ".svg";
-        console.log(imgUrl);
+function Sigil({data, id}){
+
+    // data = { name: "vampirism", index: 13 }
+    let lookup = Game.Cards.find(curr => curr.name == data.name && curr.type == "sigil");
+
+    if (lookup === undefined){
+        throw Error("could not find sigil named: " + data.name + " in Game.Cards. Got: " + lookup.toString());
+        return (<p>{data.name}</p>);
+    }
+
+    //   ?-case  to  title-case
+    let title = data.name.split(" ").map(word => word.charAt(0).toLocaleUpperCase() + word.slice(1).toLocaleLowerCase()).join(" ");
+
+    return(
+        <div className="sigil" id={id}>
+            <div dangerouslySetInnerHTML={{__html: lookup.svg}} />
+            <div className="tooltip">
+                <p className="title">{title}</p>
+                <p>{lookup.desc}</p>
+            </div>
+        </div>
+    );
 
 
-    console.groupEnd(type);
-    return <object data={imgUrl} type="image/svg+xml"></object>;
 }

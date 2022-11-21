@@ -5,7 +5,7 @@ import { gamecontext } from "./context";
 import { useContext } from "react"; //not needed if just providing context
 import Cardrow from "./Cardrow";
 
-
+import './css/game.css';
 
 
 export default class Game extends React.Component {
@@ -80,6 +80,11 @@ export default class Game extends React.Component {
 		// this.placeNewCard(this.defineNewCard("goat"), this.newcardholder());
 
 		// this.newcardholder((newindex) => {console.warn(this);this.placeNewCard(this.defineNewCard("snek"),newindex);});
+	}
+	testInit2(){
+		this.placeNewCard(this.defineNewCard("rattle snek"),1);
+		this.placeNewCard(this.defineNewCard("leech"),2);
+		this.placeNewCard(this.defineNewCard("spider"),3);
 	}
 
 
@@ -267,6 +272,7 @@ export default class Game extends React.Component {
 				<div className="left">
 					<h1>bell</h1>
 					<button onClick={() => this.testInit()}>place test Cards for opponent</button>
+					<button onClick={() => this.testInit2()}>place test Cards2</button>
 				</div>
 				<gamecontext.Provider value={this.getContextValue()}>
 					<div className="center">
