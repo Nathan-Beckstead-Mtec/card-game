@@ -61,7 +61,7 @@ export default class Cardholder extends React.Component {
         // console.groupEnd("dragOver");
     }
     handler_drop(e,thus) {
-        console.group("drop");
+        console.groupCollapsed("drop");
         
             console.log("this:");
             console.log(this);
@@ -83,7 +83,7 @@ export default class Cardholder extends React.Component {
 
         // let heldId = this.context.cards[this.index];
         let heldId = this.context.cards[this.props.index];
-        console.log("cardholder with index: " + this.props.index + " is holding: " + heldId);
+        // console.log("cardholder with index: " + this.props.index + " is holding: " + heldId);
 
         let card = <></>;
         if(heldId != null){
@@ -95,7 +95,7 @@ export default class Cardholder extends React.Component {
 
         //style={{ height: this.height, width: this.width }}
         return (
-            <div className="card-holder" 
+            <div className={"card-holder" + (heldId != null ? " hascard" : "")}
                 onDrop={droppable ? (e => this.handler_drop(e,this)) : null}
                 onDragOver={droppable ? (this.handler_dragover) : null}
                 owner={this.props.owner.toString()}

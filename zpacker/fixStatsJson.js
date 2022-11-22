@@ -101,7 +101,7 @@ function main() {
         
         
         // put link to sigils index into the animals that use them
-
+        // /*
         console.group("sigil mapping");
             console.group("sigils");
             console.log(sigils);
@@ -117,15 +117,17 @@ function main() {
                     console.log("Could not find " + nameOfSigil + " for " + thing.type + " named " + thing.name + "ignoring");
                     return null;
                 }
-                return {name: nameOfSigil,index:sigils[nameOfSigil]};
+                return {name: nameOfSigil};
+                // return {name: nameOfSigil,index:sigils[nameOfSigil]};
             }).filter(keepme => keepme != null);
 
             return thing;
         })
+        console.log("no lines here == good");
+        console.groupEnd("sigil mapping");
         // */
 
-            console.log("no lines here == good");
-        console.groupEnd("sigil mapping");
+
         console.log("final (ignoring svg):")
             console.group("final");
             console.log(newdat);

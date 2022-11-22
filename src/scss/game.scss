@@ -23,6 +23,20 @@
 .left, .right{
     flex-basis: 20%;
 }
+
+.top, .bottom{
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    height:50%;
+}
+.top{
+    justify-content: flex-end;
+}
+.bottom{
+    justify-content: flex-start;
+}
+
 .center{
     flex-basis: 60%;
     flex-grow: 1;
@@ -30,10 +44,7 @@
 
     border:2px dashed #8a8;
     height:100%;
-    display: flex;
-    flex-direction: column;
-    flex-wrap: nowrap;
-    justify-content: center;
+
 
 
     .Cardrow[type="table"]{
@@ -57,9 +68,10 @@
             // min-width: 20%;
             min-width: 15%;
 
-            transition: flex-basis 1s;
+            transition: flex-basis 0.8s;
+            transition-timing-function: linear;
 
-            &:hover{
+            &.hascard:hover{
                 flex-basis: 30%;
             }
         }

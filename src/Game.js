@@ -51,8 +51,9 @@ export default class Game extends React.Component {
 		//"hand": the cards in the hand
 		this.turn = 0;
 
-		this.playerData = [{name:"bob"}, {name:"alice"}];
-		const testdeck = ["wolf","rattle snek","leech","snek","bunny","elephant","leviathan pup","bison","puppy","venom","Squirrel","goat","sheep","vampirism","spider","fox"];
+		this.playerData = [{name:"blue"}, {name:"red"}];
+		// const testdeck = ["wolf","rattle snek","leech","snek","bunny","elephant","leviathan pup","bison","puppy","venom","Squirrel","goat","sheep","vampirism","spider","fox"];
+		const testdeck = ["wolf","rattle snek","leech","snek","bunny","elephant","leviathan pup","bison","puppy","Squirrel","goat","sheep","spider","fox"];
 		this.decks = [new deck(testdeck), new deck(testdeck)];
 
 
@@ -60,11 +61,184 @@ export default class Game extends React.Component {
 		this.health = {};
 		this.attac = {};
 		this.cost = {};
-		this.sigils = {};
+		this.sigils = {}; //stores sigils for card
+		this.dataSigils = {};  //stores data used for sigils
 
 		// this.imgUrl = {};
-		this.svgindex = {};
+		this.svgindex = {};  //stores the index into Game.cards to get the svg data (Game.cards[svgindex[id]].svg )
 	}
+
+
+//#######################
+//#                     #
+//# START OF GAME LOGIC #
+//#                     #
+//#######################
+
+	getTargetIndex(id){
+		//get card id then return the index of the target cards
+		
+
+		let index = this.state.cardholders.findIndex(curr => curr == id);
+		let props = this.CardholderProps[index];
+		if(props.type != "table"){
+			console.warn("a non-table card (id: " + id + ") called getTarget");
+			return null;
+		}
+		let targetIndex = (index + 4 ) % 8 //sketchy math go burrr
+		
+		if(this.CardholderProps[targetIndex].type != "table"){
+			throw Error("id: " + id + " targeted a card with index: " + targetIndex + " but the targeted card is not on the table");
+		}
+		if(this.CardholderProps[targetIndex].owner ==  props.owner){
+			throw Error("id: " + id + " targeted a card with index: " + targetIndex + " but the targeted card and the targeter card have the same owner");
+		}
+
+		return targetIndex;
+	}
+	getTargetId(id){
+		//get card id then return the id of the target cards
+		return this.state.cardholders[this.getTargetIndex(id)];
+	}
+
+	handleTurn(player){
+		//calls turnAttack() for each card owned by (player)
+		//calls turnEndRunSigils() for each card owned by (player)
+		//rotate the gameboard
+		//toggle this.player
+
+		let cardIds = this.state.cardholders.filter((curr,index) => {
+			const props = this.CardholderProps[index];
+			return (props.owner == player && props.type == "table");
+		});
+
+		cardIds.forEach((cardId) => this.turnAttack(cardId));
+		cardIds.forEach((cardId) => this.turnEndRunSigils(cardId));
+
+		this.turn = (this.turn + 1) % 2; //sketchy math go burrr (this ones not too bad)
+		this.forceUpdate();
+	}
+
+	turnAttack(id){
+		//get attack
+		//call getTarget()
+		//call applyDamage()
+		//handle my attack sigils
+		//animate card leaping at target
+		
+		if (id === null){
+			return;
+		}
+
+		let target = this.getTargetId(id);
+		
+		if(target === null){
+			console.info(this.titles[id] + "(" + id + ") has no target. skipping");
+			return;
+		}
+
+		let dmg = this.attac[id];
+
+		let hit = this.applyDamage(target, dmg, id);
+
+
+		let mysigils = this.sigils[id];
+		if(typeof mysigils != "undefined"){
+			mysigils = mysigils.map(curr => curr.name); //hacky because I don't want to refactor everything to change the format of cardPack.json
+			console.debug(this.titles[id] + "(" + id + ") has sigils: " + mysigils.join(","));
+			if (hit && mysigils.includes("venom")){
+				if(typeof this.dataSigils[target] == "undefined"){
+					this.dataSigils[target] = {};
+				}
+
+				this.dataSigils[target].venom = 1 + (this.dataSigils[target]?.venom ?? 0);
+				console.info( this.titles[id] + "(" + id + ") injected " +  this.titles[target] + "(" +target + ") with venom. now has " + this.dataSigils[target].venom + " venom.");
+				//aka this.dataSigils[target].venom += 1; start from 0
+			}
+			if (hit && mysigils.includes("vampirism")){
+				this.health[id]++;
+				console.info( this.titles[id] + "(" + id + ") got health from vampirism");
+			}
+		}
+
+	}
+
+	turnEndRunSigils(id){
+		if (id === null){
+			return;
+		}
+
+		//my sigils
+
+		
+		//sigils that affected me
+		let datasig = this.dataSigils[id];
+		if (datasig != undefined){
+
+			//venom
+			if(typeof datasig.venom != undefined){
+				console.info(this.titles[id] + "(" + id + ") was afected by " + datasig.venom + " venom");
+				this.applyDamage(id,datasig.venom,id); //why r u hitting yourself?
+			}
+		}
+		return;
+	}
+
+	applyDamage(id, ammount, fromId = null){
+		//trusts inputs
+
+		if (id === null || id === undefined){
+			console.error("applyDamage() got target null or undefined, id: " + id + " ammount: " + ammount + " fromId: " + fromId);
+			return false;
+		}
+		//remove health and handle reactonary sigils
+		//animate losing health
+		//return true if contact (i.e. if apply venom)
+
+		//applyDamage(id,0) should only act like a contact check
+
+		if (ammount < 0 ){
+			console.error("apply Damage got ammount < 0, id: " + id + " ammount: " + ammount + " fromId: " + fromId);
+			return false;
+		}
+		console.info(this.titles[fromId] + "(" + fromId + ") attacked " + this.titles[id] + "(" + id + ") for " + ammount + " damage");
+		let finalhealth = (this.health[id] -= ammount);
+		if(finalhealth <= 0){
+			this.killCard(id,fromId);
+		}
+		return true;
+	}
+
+	killCard(id,fromId = null){
+		//animate card burning
+		//deallocate memory
+		//return amount of sacrifice made
+
+		console.info(this.titles[id] + " (" + id + ") died");
+
+		delete this.titles[id];
+		delete this.health[id];
+		delete this.attac[id];
+		delete this.cost[id];
+		delete this.sigils[id];
+		delete this.dataSigils[id];
+		delete this.svgindex[id];
+
+		this.setState(curr => {
+			let copy = Array.from(curr.cardholders);
+			const index = copy.findIndex(curId => curId == id);
+			copy[index] = null;
+			return {cardholders: copy};
+		});
+	}
+
+
+//#####################
+//#                   #
+//# END OF GAME LOGIC #
+//#                   #
+//#####################
+
 
 
 	testInit() {
@@ -233,7 +407,7 @@ export default class Game extends React.Component {
 
 
 	sanitychecker(){
-		console.group("sanity checker");
+		console.groupCollapsed("sanity checker");
 			console.groupCollapsed("all cards defined");
 				console.log(this.titles);
 			console.groupEnd("all cards defined");
@@ -253,7 +427,8 @@ export default class Game extends React.Component {
 
 		// let cardholderJSX = this.state.cardholders.map((val, index) => <Cardholder index={index} />);
 
-
+		console.log("Game.this:");
+		console.log(this);
 
 
 		this.CardholderProps.forEach((curr,index) => {curr.index = index;});
@@ -264,23 +439,34 @@ export default class Game extends React.Component {
 		locations.table1 = this.CardholderProps.filter(curr => curr.type == "table" && curr.owner == 1);
 		locations.table0 = this.CardholderProps.filter(curr => curr.type == "table" && curr.owner == 0);
 		locations.hand0  = this.CardholderProps.filter(curr => curr.type == "hand"  && curr.owner == 0);
-		console.log("Game.locations");
-		console.log(locations);
+		
+		// console.log("Game.locations");
+		// console.log(locations);
+
+
+		// this.turn = 0;
+		// this.playerData = [{name:"blue"}, {name:"red"}];
+		let turnPlayerName = this.playerData[this.turn].name;
 
 		return (
 			<div className="game">
 				<div className="left">
+					<h1>Turn: {turnPlayerName}</h1>
 					<h1>bell</h1>
 					<button onClick={() => this.testInit()}>place test Cards for opponent</button>
 					<button onClick={() => this.testInit2()}>place test Cards2</button>
+					<button onClick={() => this.handleTurn(this.turn)}>end {turnPlayerName}'s turn</button>
 				</div>
 				<gamecontext.Provider value={this.getContextValue()}>
 					<div className="center">
-						<Cardrow data={locations.hand1}  owner={1} type={"hand"}/>
-						<Cardrow data={locations.table1} owner={1} type={"table"}/>
-						<br></br>
-						<Cardrow data={locations.table0} owner={0} type={"table"}/>
-						<Cardrow data={locations.hand0}  owner={0} type={"hand"}/>
+						<div className="top">
+							<Cardrow data={locations.hand1}  owner={1} type={"hand"}/>
+							<Cardrow data={locations.table1} owner={1} type={"table"}/>
+						</div>
+						<div className="bottom">
+							<Cardrow data={locations.table0} owner={0} type={"table"}/>
+							<Cardrow data={locations.hand0}  owner={0} type={"hand"}/>
+						</div>
 					</div>
 				</gamecontext.Provider>
 				<div className="right">

@@ -34,15 +34,26 @@ https://lospec.com/palette-list/vinik24
   flex-basis: 20%;
 }
 
+.top, .bottom {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  height: 50%;
+}
+
+.top {
+  justify-content: flex-end;
+}
+
+.bottom {
+  justify-content: flex-start;
+}
+
 .center {
   flex-basis: 60%;
   flex-grow: 1;
   border: 2px dashed #8a8;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  flex-wrap: nowrap;
-  justify-content: center;
 }
 .center .Cardrow[type=table] {
   width: 100%;
@@ -59,9 +70,10 @@ https://lospec.com/palette-list/vinik24
   flex-grow: 1;
   flex-basis: 25%;
   min-width: 15%;
-  transition: flex-basis 1s;
+  transition: flex-basis 0.8s;
+  transition-timing-function: linear;
 }
-.center .Cardrow[type=table] .card-holder:hover {
+.center .Cardrow[type=table] .card-holder.hascard:hover {
   flex-basis: 30%;
 }
 
