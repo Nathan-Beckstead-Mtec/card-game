@@ -19,6 +19,10 @@
     flex-wrap: nowrap;
     height:100vh;
     width: 100%;
+
+    // background-image: url("../../public/img/gray+mountain+rock-2048x2048.png");
+    background-image: url("../../public/img/pexels-szabó-viktor-3227984.jpg");
+    background-size: 60%;
 }
 .left, .right{
     flex-basis: 20%;
@@ -76,12 +80,47 @@
             }
         }
     }
+
+    .Cardrow[type="hand"]{
+        height: 20vh;
+
+        display: flex;
+        flex-wrap: nowrap;
+        flex-direction: row;
+
+        overflow-x: scroll;
+
+
+
+        align-self: flex-end;
+        &[owner="1"]{
+            align-self: flex-start;
+        }
+
+
+        .card-holder{
+            height: 100%;
+          
+            /*
+            flex-grow: 1;
+            flex-basis: 25%;
+            // min-width: 20%;
+            min-width: 15%;
+            */
+
+            transition: flex-basis 0.8s;
+            transition-timing-function: linear;
+
+        }
+    }
 }
 
 
 
 
-
+div[grow="true"] .Cardrow[type="table"] > .card-holder.hascard:hover{
+    flex-basis: 30%;
+}
 
 
 

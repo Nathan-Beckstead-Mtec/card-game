@@ -25,29 +25,64 @@ export default class Cardholder extends React.Component {
 
 
     componentDidMount(){
+        
         let me = ReactDOM.findDOMNode(this);
-
-        let cont = me.parentNode;
-        // console.log(cont);
         const ratio = 5 / 7;
-        // let unit = (Math.min(cont.clientHeight , cont.clientWidth / ratio) / 100).toFixed(4) + "px";
-        let height = (me.clientWidth / ratio ).toFixed(4) + "px";
-        // this.setState({cssunit: unit});
-        me.style.setProperty("height",height);
+        
+        let updateFunc;
+        let updateFuncScry;
 
-        function resize(input, ratio){
-            // console.log(input);
-            // input[0].contentRect.height
-            // input[0].contentRect.width
-            if (input[0].target == undefined){
-                console.info(input);
-                return;
-            }
-            let height = (input[0].contentRect.width / ratio ).toFixed(4) + "px";
-            me.style.setProperty("height",height);
+        if (this.props.type == "table"){
+            //change height based on width
+
+            updateFunc = (me, ratio) => {
+                // let cont = me.parentNode;
+                // console.log(cont);
+                // let unit = (Math.min(cont.clientHeight , cont.clientWidth / ratio) / 100).toFixed(4) + "px";
+                let height = (me.clientWidth / ratio ).toFixed(4) + "px";
+                // this.setState({cssunit: unit});
+                me.style.setProperty("height",height);
+            };
+            updateFuncScry = (input, ratio) => {
+                // console.log(input);
+                // input[0].contentRect.height
+                // input[0].contentRect.width
+                if (input[0].target == undefined){
+                    console.info(input);
+                    return;
+                }
+                let height = (input[0].contentRect.width / ratio ).toFixed(4) + "px";
+                me.style.setProperty("height",height);
+            };
+
+        } else if (this.props.type == "hand"){
+            //change width based on height
+
+            updateFunc = (me, ratio) => {
+                let width = (me.clientHeight * ratio).toFixed(4) + "px";
+                me.style.setProperty("width",width);
+            };
+            updateFuncScry = (input, ratio) => {
+                // console.log(input);
+                // input[0].contentRect.height
+                // input[0].contentRect.width
+                if (input[0].target == undefined){
+                    console.info(input);
+                    return;
+                }
+                let width = (input[0].contentRect.height * ratio ).toFixed(4) + "px";
+                me.style.setProperty("width",width);
+            };
+        } else {
+            console.error(`this card holder is neither of type "table" or "hand", got props: `);
+            console.warn(this.props);
         }
-        const scryglass = new ResizeObserver((e) => resize(e,ratio));
+
+        updateFunc(me,ratio);
+
+        const scryglass = new ResizeObserver((e) => updateFuncScry(e,ratio));
         scryglass.observe(me);
+        window.addEventListener("resize", () => updateFunc(me,ratio));
     }
 
 

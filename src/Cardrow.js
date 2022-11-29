@@ -28,7 +28,7 @@ export default class CardRow extends React.Component{
         let myowner = this.props.owner;
         //this object is a slave :[
 
-        let cardholdersJSX = myindexes.map(val => <Cardholder index={val} owner={myowner}/>);
+        let cardholdersJSX = myindexes.map(val => <Cardholder index={val} owner={myowner} type={mytype}/>);
 
 
         return (

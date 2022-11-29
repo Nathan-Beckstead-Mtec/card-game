@@ -232,6 +232,14 @@ export default class Game extends React.Component {
 		});
 	}
 
+	drawcard(e, thus){
+		let cardId = thus.defineNewCard(thus.decks[thus.turn].draw());
+		thus.placeNewCardInNewCardHolder(cardId, "hand", thus.turn, thus);
+		// this.placeNewCardInNewCardHolder(this.defineNewCard("puppy"));
+		// this.placeNewCard(this.defineNewCard(this.decks[this.CardholderProps[4].owner].draw()),4);
+
+	}
+
 
 //#####################
 //#                   #
@@ -282,11 +290,15 @@ export default class Game extends React.Component {
 
 
 
-	placeNewCardInNewCardHolder(id){
-		this.setState(curr => {
+	placeNewCardInNewCardHolder(id, type, owner, thus = this){
+		
+		function statemutator(curr, thus){
 			console.groupCollapsed("placeNewCardInNewCardHolder");
-				console.log(this.constructor.name);
-				console.log("attempting to place: (id: " + id + ", name: " + this.titles[id] + ")");
+				// console.log("this.constructor.name:");
+				// console.log(this.constructor.name);
+				console.log("thus.constructor.name:");
+				console.log(thus.constructor.name);
+				console.log("attempting to place: (id: " + id + ", name: " + thus.titles[id] + ")");
 				console.log("internal var:");
 			let cardholdercopy = Array.from(curr.cardholders);
 				console.log(cardholdercopy);
@@ -294,9 +306,14 @@ export default class Game extends React.Component {
 				console.log("index:");
 				console.log(index);
 			cardholdercopy[index] = id;
+
+			thus.CardholderProps[index] = {type: type, owner: owner};
+
 			console.groupEnd("placeNewCardInNewCardHolder");
 			return {cardholders: cardholdercopy};
-		});
+		}
+
+		thus.setState(curr => statemutator(curr, thus));
 
 	}
 
@@ -470,7 +487,7 @@ export default class Game extends React.Component {
 					</div>
 				</gamecontext.Provider>
 				<div className="right">
-					<button onClick={this.drawcard}>draw card tester</button>
+					<button onClick={e => this.drawcard(e, this)}>draw card tester</button>
 				</div>
 			</div>
 		);
@@ -550,3 +567,12 @@ class deck{
 
 
 
+
+
+function callcallback(callback){
+	callback("hi");
+}
+
+function thing(a,b){
+	console.log("a: " + a + ", b: " + b);
+}
