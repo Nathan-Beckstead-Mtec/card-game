@@ -69,6 +69,8 @@ https://lospec.com/palette-list/vinik24
   align-items: flex-start;
 }
 .center .Cardrow[type=table] .card-holder {
+  padding: 0em;
+  margin: 0.5em;
   flex-grow: 1;
   flex-basis: 25%;
   min-width: 15%;
@@ -122,22 +124,29 @@ div[grow=true] .Cardrow[type=table] > .card-holder.hascard:hover {
   width: 100%;
 }
 
-.Cardrow[type=table] .card-holder {
-  border: 3px dashed orange;
-  padding: 0em;
-  margin: 0.5em;
-  box-shadow: 0 0 1em 0 var(--box-shadow-col), 0 0 0 0 #000;
-  display: inline-block;
-}
-.Cardrow[type=table] .card-holder[owner="1"] {
-  --box-shadow-col: red;
-  border-color: orange;
-}
-.Cardrow[type=table] .card-holder[owner="0"] {
-  border-color: purple;
-  --box-shadow-col: blue;
-}
+/*
+.Cardrow[type="table"] .card-holder{
+    border: 3px dashed orange;
+    padding: 0em;
+    margin: 0.5em;
+    // background-color: #;
+    box-shadow: 0 0 1em 0 var(--box-shadow-col), 0 0 0 0 #000;
+    display: inline-block;
+    // resize: both;
+    // overflow: scroll;
 
+    &[owner = "1"]{
+        --box-shadow-col: red;
+        // --rangle : 180deg;
+        border-color: orange;
+        // transform: rotate(var(--rangle));
+    }
+    &[owner = "0"]{
+        border-color: purple;
+        --box-shadow-col: blue;
+    }
+}
+*/
 div[animations=true] .card-holder {
   box-shadow: 0 0 1em 0 var(--box-shadow-col), 0 0 0 0 #000;
 }

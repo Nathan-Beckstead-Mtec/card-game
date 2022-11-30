@@ -130,11 +130,9 @@ export default class Cardholder extends React.Component {
         let heldId = this.context.cards[this.props.index];
         // console.log("cardholder with index: " + this.props.index + " is holding: " + heldId);
 
-        let card = <></>;
-        if(heldId != null){
-            card = <Card id={heldId} />
-        }
 
+        let card = <Card id={heldId} />
+        
         let droppable = heldId == null;
 
 

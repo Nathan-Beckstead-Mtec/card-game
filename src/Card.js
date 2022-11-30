@@ -92,7 +92,22 @@ export default class Card extends React.Component {
         //NOT MY TURN
 
     render() { //required by React.component
+
         let id = this.props.id;
+        
+        if (id === null){
+            //Fake Card!
+            return (
+                <div className="fakecard">
+                    <p>place</p>
+                    <p>card</p>
+                    <p>here</p>
+                </div>
+            );
+        }
+
+
+
         let title = this.context.titles[id];
         let health = this.context.health[id];
         let attac = this.context.attac[id];

@@ -34,6 +34,31 @@ https://lospec.com/palette-list/vinik24
   margin: 0;
 }
 
+div.fakecard {
+  height: calc(100 * var(--magic, 0.1em));
+  display: inline-block;
+  border-radius: calc(5 * var(--magic));
+  font-size: calc(10 * var(--magic, 0.1px));
+  box-shadow: inset 0 0 1em 0.2em #000;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  justify-items: center;
+}
+div.fakecard p {
+  margin: 0;
+  padding: 0;
+  font-family: "paint-number", monospace;
+  color: rgba(255, 0, 0, 0.2666666667);
+  text-align: center;
+}
+
+div.card-holder[owner="1"] div.fakecard p {
+  display: none;
+  color: transparent;
+}
+
 div.card {
   background-color: #bda583;
   text-align: center;

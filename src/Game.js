@@ -68,6 +68,8 @@ export default class Game extends React.Component {
 		this.svgindex = {};  //stores the index into Game.cards to get the svg data (Game.cards[svgindex[id]].svg )
 
 		this.hasTriggeredFunFeature = false;
+		
+		this.playerHealth = [20,20];
 	}
 
 
@@ -77,11 +79,15 @@ export default class Game extends React.Component {
 //#                     #
 //#######################
 
+	getIndexFromId(id){
+		return this.state.cardholders.findIndex(curr => curr == id);
+	}
+
 	getTargetIndex(id){
 		//get card id then return the index of the target cards
 		
 
-		let index = this.state.cardholders.findIndex(curr => curr == id);
+		let index = this.getIndexFromId(id);
 		let props = this.CardholderProps[index];
 		if(props.type != "table"){
 			console.warn("a non-table card (id: " + id + ") called getTarget");
@@ -133,13 +139,16 @@ export default class Game extends React.Component {
 		}
 
 		let target = this.getTargetId(id);
+		let dmg = this.attac[id];
 		
 		if(target === null){
-			console.info(this.titles[id] + "(" + id + ") has no target. skipping");
+			console.info(this.titles[id] + "(" + id + ") has no target. attacking player");
+			let owner = this.CardholderProps[this.getIndexFromId(id)].owner;
+			let targetPlayer = 1 - owner; //sketchy math if players > 2
+			this.damagePlayer(targetPlayer, dmg, id);
 			return;
 		}
 
-		let dmg = this.attac[id];
 
 		let hit = this.applyDamage(target, dmg, id);
 
@@ -186,6 +195,24 @@ export default class Game extends React.Component {
 		return;
 	}
 
+	damagePlayer(player, ammount, fromId = null){
+		//OUCH!
+
+		console.log(this.titles[fromId] + "(" + fromId + ") attacked player: " + this.playerData[player].name + " (" + player + ")");
+
+		if(player == 1){
+			console.warn("LOL, this is (currently) a single player survival game the other guy can't take damage");
+			return;
+		}
+
+
+		this.playerHealth[player] -= ammount;
+		if (this.playerHealth[player] <= 0){
+			alert("you died\nContinue?");
+			this.playerHealth[player] = 10;
+		}
+	}
+
 	applyDamage(id, ammount, fromId = null){
 		//trusts inputs
 
@@ -197,7 +224,8 @@ export default class Game extends React.Component {
 		//animate losing health
 		//return true if contact (i.e. if apply venom)
 
-		//applyDamage(id,0) should only act like a contact check
+		//NOTE:
+		//applyDamage(id,0) shouldn't error, rather it acts like a contact check
 
 		if (ammount < 0 ){
 			console.error("apply Damage got ammount < 0, id: " + id + " ammount: " + ammount + " fromId: " + fromId);
@@ -295,8 +323,8 @@ export default class Game extends React.Component {
 			console.error("you probably don't want to killCardholder of type hand");
 			return;
 		}
+		thus.CardholderProps = thus.CardholderProps.filter((item, itemIndex) => itemIndex != index);
 		thus.setState(curr => {
-			thus.CardholderProps = thus.CardholderProps.filter((item, itemIndex) => itemIndex != index);
 			let copy = curr.cardholders.filter((item, itemIndex) => itemIndex != index);
 			return {cardholders: copy};
 		});
@@ -451,7 +479,7 @@ export default class Game extends React.Component {
 
 
 	sanitychecker(){
-		console.groupCollapsed("sanity checker");
+		// console.groupCollapsed("sanity checker");
 			console.groupCollapsed("all cards defined");
 				console.log(this.titles);
 			console.groupEnd("all cards defined");
@@ -461,7 +489,12 @@ export default class Game extends React.Component {
 			console.assert(countOfthisKey == 1, {key, name: this.titles[key] ,countOfthisKey, errorMsg: (countOfthisKey > 1 ? "this card is in multiple card holders at the same time" : "this card is not in a card holder" ) });
 			console.assert(this.health[key] > 0, {key, name: this.titles[key] , health: this.health[key], errorMsg: "this card shouuld be dead"});
 		});
-		console.groupEnd("sanity checker");
+		if(this.state.cardholders.length != this.CardholderProps.length){
+			setTimeout(() => console.assert(this.state.cardholders.length == this.CardholderProps.length, {errorMsg: "length of cardholders and cardholderprops are not equal"}),
+			500);
+			;
+		}
+		// console.groupEnd("sanity checker");
 	}
 
 	render() {
@@ -491,10 +524,12 @@ export default class Game extends React.Component {
 		// this.turn = 0;
 		// this.playerData = [{name:"blue"}, {name:"red"}];
 		let turnPlayerName = this.playerData[this.turn].name;
+		let health = this.playerHealth[0];
 
 		return (
 			<div className="game">
 				<div className="left">
+					<h1>Health: {health}</h1>
 					<h1>Turn: {turnPlayerName}</h1>
 					<h1>bell</h1>
 					<button onClick={() => this.testInit()}>place test Cards for opponent</button>

@@ -30,6 +30,36 @@
 }
 
 
+div.fakecard{
+    // filter: blur(5px);
+    height: calc(100 * var(--magic,0.1em));
+    display:inline-block;
+    border-radius: calc(5* var(--magic));
+
+    font-size: calc(10*var(--magic,0.1px));
+    box-shadow: inset 0 0 1em 0.2em #000;
+    width:100%;
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-items: center;
+
+    p{
+        margin:0;
+        padding:0;
+        font-family: "paint-number",monospace;
+        // color: col.$paperRed;
+        color: #ff000044;
+        text-align: center;
+    }
+}
+div.card-holder[owner="1"] div.fakecard p{
+    display: none;
+    color: transparent;
+}
+
+
 div.card{
     $edge: 0.25em;
 
