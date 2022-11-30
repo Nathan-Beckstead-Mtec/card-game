@@ -26,6 +26,9 @@ export default class Cardholder extends React.Component {
 
     componentDidMount(){
         
+        return;
+        console.error("this shouldnt run");
+
         let me = ReactDOM.findDOMNode(this);
         const ratio = 5 / 7;
         
@@ -42,6 +45,9 @@ export default class Cardholder extends React.Component {
                 let height = (me.clientWidth / ratio ).toFixed(4) + "px";
                 // this.setState({cssunit: unit});
                 me.style.setProperty("height",height);
+                
+                //stolen from disabled Card.js
+                me.style.setProperty("--magic",height);
             };
             updateFuncScry = (input, ratio) => {
                 // console.log(input);
@@ -72,6 +78,10 @@ export default class Cardholder extends React.Component {
                 }
                 let width = (input[0].contentRect.height * ratio ).toFixed(4) + "px";
                 me.style.setProperty("width",width);
+
+                //stolen from disabled Card.js
+                let unit = (input[0].contentRect.height / 100).toFixed(4) + "px";
+                me.style.setProperty("--magic",unit);
             };
         } else {
             console.error(`this card holder is neither of type "table" or "hand", got props: `);

@@ -27,6 +27,8 @@ export default class Card extends React.Component {
         //fired when we first are inserted into DOM
         //yes it triggers render twice but it wont display the first to user
 
+        // return;
+
         let me = ReactDOM.findDOMNode(this);
         //___________________________
         //|                          |
@@ -36,7 +38,17 @@ export default class Card extends React.Component {
         let cont = me.parentNode;
         // console.log(cont);
         const ratio = 5 / 7;
-        let unit = (Math.min(cont.clientHeight , cont.clientWidth / ratio) / 100).toFixed(4) + "px";
+        
+        let unit = ((cont.clientWidth / ratio) / 100).toFixed(4) + "px";
+        
+        // let unit;
+        // if (cont.clientHeight < 20 || cont.clientWidth < 20){ //if my container has a small edge (ie usually a flex or inline) then I need to grow to based off the bigger one (thus expanding the container)
+        //     unit = (Math.max(cont.clientHeight , cont.clientWidth / ratio) / 100).toFixed(4) + "px";
+        // }else{
+        //     unit = (Math.min(cont.clientHeight , cont.clientWidth / ratio) / 100).toFixed(4) + "px";
+        // }
+
+
         // this.setState({cssunit: unit});
         cont.style.setProperty("--magic",unit);
 
@@ -44,12 +56,23 @@ export default class Card extends React.Component {
             // console.log(input);
             // input[0].contentRect.height
             // input[0].contentRect.width
+            //new change to recompile
+
             if (input[0].target == undefined){
                 console.info(input);
                 return;
             }
             const ratio = 5 / 7;
-            let unit = (Math.min(input[0].contentRect.height , input[0].contentRect.width / ratio) / 100).toFixed(4) + "px";
+            // let unit = (Math.min(input[0].contentRect.height , input[0].contentRect.width / ratio) / 100).toFixed(4) + "px";
+
+            let unit = (input[0].contentRect.width / ratio / 100).toFixed(4) + "px";
+            // let unit;
+            // if (input[0].contentRect.height < 20 || input[0].contentRect.width < 20){ //if my container has a small edge (ie usually a flex or inline) then I need to grow to based off the bigger one (thus expanding the container)
+            //     unit = (Math.max(input[0].contentRect.height , input[0].contentRect.width / ratio) / 100).toFixed(4) + "px";
+            // }else{
+            //     unit = (Math.min(input[0].contentRect.height , input[0].contentRect.width / ratio) / 100).toFixed(4) + "px";
+            // }
+
             input[0].target.style.setProperty("--magic",unit);
         }
         const scryglass = new ResizeObserver(resize);

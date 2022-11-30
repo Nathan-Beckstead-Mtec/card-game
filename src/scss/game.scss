@@ -33,19 +33,14 @@
     flex-direction: column;
     flex-wrap: nowrap;
     height:50%;
-}
-.top{
-    justify-content: flex-end;
-}
-.bottom{
-    justify-content: flex-start;
+    justify-content: space-between;
 }
 
 .center{
     flex-basis: 60%;
     flex-grow: 1;
     // overflow-y: scroll;
-
+    width: 60%;
     border:2px dashed #8a8;
     height:100%;
 
@@ -82,35 +77,51 @@
     }
 
     .Cardrow[type="hand"]{
-        height: 20vh;
+        // width:100%;
+        // padding: 1em;
+        // display: inline-block;
 
-        display: flex;
-        flex-wrap: nowrap;
+
+        width: 100%;
+
+        display: inline-flex;
         flex-direction: row;
+        flex-wrap: nowrap;
+        justify-content: flex-start;
+        align-items:flex-start;
 
-        overflow-x: scroll;
 
 
-
-        align-self: flex-end;
+        justify-self: flex-end;
         &[owner="1"]{
             align-self: flex-start;
         }
 
 
         .card-holder{
-            height: 100%;
-          
-            /*
+            
+            max-width: 15%;
+
+
+            // THIS IS STUPID WHY DOES THIS FIX THIS
+            // I HATE FLEX BOXES, I HATE FLEX BOXES, I HATE FLEXBOXES
+            min-width:0;
+            overflow: hidden;
+            //https://stackoverflow.com/questions/36247140/why-dont-flex-items-shrink-past-content-size
+
+
+            // flex-shrink: 1;
+            // min-width: 15%;
+            // display:inline-block;
+
+
             flex-grow: 1;
             flex-basis: 25%;
             // min-width: 20%;
-            min-width: 15%;
-            */
+            // min-width: 15%;
 
             transition: flex-basis 0.8s;
             transition-timing-function: linear;
-
         }
     }
 }
@@ -141,7 +152,7 @@ div[grow="true"] .Cardrow[type="table"] > .card-holder.hascard:hover{
     // background-color: #;
     box-shadow: 0 0 1em 0 var(--box-shadow-col), 0 0 0 0 #000;
     display: inline-block;
-    resize: both;
+    // resize: both;
     // overflow: scroll;
 
     &[owner = "1"]{

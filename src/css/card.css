@@ -40,9 +40,10 @@ div.card {
   display: block;
   font-size: calc(10 * var(--magic, 0.1px));
   height: 9.5em;
-  width: 6.6428571429em;
+  display: inline-block;
   padding: 0.25em;
   color: #292418;
+  border-radius: calc(3s * var(--magic));
   --card-rem: calc(10*var(--magic,0.1px));
 }
 div.card .card-title {
