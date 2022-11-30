@@ -37,7 +37,7 @@ div.card{
     text-align: center;
     display: block;
     font-size: calc(10*var(--magic,0.1px)); //100 * --magic == height  //1em  = 10*--magic
-    height: calc(10em - 2 * $edge);
+    height: calc(100 * var(--magic,0.1em) - 2 * $edge);
     // width: calc(10em * 5 / 7 - 2 * $edge);
     display:inline-block;
     padding:$edge;
@@ -46,7 +46,7 @@ div.card{
     color: col.$paperBlack;
 
 
-    border-radius: calc(3s* var(--magic));
+    border-radius: calc(3* var(--magic));
 
     --card-rem: calc(10*var(--magic,0.1px));
 

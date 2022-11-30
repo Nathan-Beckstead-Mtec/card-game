@@ -66,6 +66,8 @@ export default class Game extends React.Component {
 
 		// this.imgUrl = {};
 		this.svgindex = {};  //stores the index into Game.cards to get the svg data (Game.cards[svgindex[id]].svg )
+
+		this.hasTriggeredFunFeature = false;
 	}
 
 
@@ -288,7 +290,17 @@ export default class Game extends React.Component {
 		return;
 	}
 
-
+	killCardholder(index, thus = this){
+		if (thus.CardholderProps[index].type == "table"){
+			console.error("you probably don't want to killCardholder of type hand");
+			return;
+		}
+		thus.setState(curr => {
+			thus.CardholderProps = thus.CardholderProps.filter((item, itemIndex) => itemIndex != index);
+			let copy = curr.cardholders.filter((item, itemIndex) => itemIndex != index);
+			return {cardholders: copy};
+		});
+	}
 
 	placeNewCardInNewCardHolder(id, type, owner, thus = this){
 		
@@ -382,7 +394,22 @@ export default class Game extends React.Component {
 		}
 		console.info("...from: " + oldindex);
 
-		thus.setcard_raw(oldindex, null, thus);
+		if(thus.CardholderProps[oldindex].owner != thus.CardholderProps[index].owner){
+			console.warn("a card just transfered owners but its a feature");
+			if (!thus.hasTriggeredFunFeature){
+				setTimeout(alert("Note: A card just transfered owners but it's a fun feature! :D"),20);
+			}
+
+			thus.hasTriggeredFunFeature = true;
+		}
+
+
+		if (thus.CardholderProps[oldindex].type == "hand"){
+			thus.killCardholder(oldindex);
+		} else{
+			thus.setcard_raw(oldindex, null, thus);
+		}
+
 		thus.setcard_raw(index, id, thus);
 
 		function findId(id) {

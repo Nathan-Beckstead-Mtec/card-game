@@ -32,9 +32,13 @@
     display: flex;
     flex-direction: column;
     flex-wrap: nowrap;
-    height:50%;
+    // height:50%;
     justify-content: space-between;
 }
+.bottom{
+    flex-grow: 1;
+}
+
 
 .center{
     flex-basis: 60%;
@@ -43,7 +47,12 @@
     width: 60%;
     border:2px dashed #8a8;
     height:100%;
+    box-sizing: border-box;
+    padding-bottom: 3vh;
 
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
 
 
     .Cardrow[type="table"]{
@@ -54,12 +63,6 @@
         flex-wrap: nowrap;
         justify-content: space-around;
         align-items:flex-start;
-
-
-        &[owner="1"]{
-            align-items: flex-end;
-        }
-
 
         .card-holder{
             flex-grow: 1;
@@ -81,47 +84,56 @@
         // padding: 1em;
         // display: inline-block;
 
-
+        
         width: 100%;
-
+        
         display: inline-flex;
         flex-direction: row;
         flex-wrap: nowrap;
         justify-content: flex-start;
         align-items:flex-start;
-
-
-
-        justify-self: flex-end;
-        &[owner="1"]{
-            align-self: flex-start;
-        }
-
+        
+        $offset: 1vw;
+        position: relative;
+        align-items: flex-end;
 
         .card-holder{
+            font-size: calc(10*var(--magic,0.1px));
+            box-shadow: -0.5em 0 .6em 0em #000;
+            transition: left 0.3s ease-in, transform 0.2s ease-in;
+
+            position: relative;
+            left: 0;
+            &:not(:first-child){
+                margin-left: calc(-1 * $offset);
+            }
+            &:hover{
+                transform: translateY(-4vh);
+                z-index: 1;
+                // flex-basis: 40%;
+                box-shadow: -0.5em 0 .6em 0em #000;
+                transition: transform 0.2s ease-out;
+            }
+            &:hover ~ .card-holder {
+                left: calc($offset + 0.5em);
+                transition: left 0.3s ease-out;
+            }
+
             
-            max-width: 15%;
-
-
             // THIS IS STUPID WHY DOES THIS FIX THIS
             // I HATE FLEX BOXES, I HATE FLEX BOXES, I HATE FLEXBOXES
             min-width:0;
-            overflow: hidden;
+            // overflow: hidden;
             //https://stackoverflow.com/questions/36247140/why-dont-flex-items-shrink-past-content-size
-
-
-            // flex-shrink: 1;
-            // min-width: 15%;
-            // display:inline-block;
-
-
+            
+            max-width: 25%;
             flex-grow: 1;
             flex-basis: 25%;
             // min-width: 20%;
             // min-width: 15%;
 
-            transition: flex-basis 0.8s;
-            transition-timing-function: linear;
+            // transition: flex-basis 0.2s;
+            // transition-timing-function: linear;
         }
     }
 }
@@ -145,7 +157,7 @@ div[grow="true"] .Cardrow[type="table"] > .card-holder.hascard:hover{
 }
 
 
-.card-holder{
+.Cardrow[type="table"] .card-holder{
     border: 3px dashed orange;
     padding: 0em;
     margin: 0.5em;

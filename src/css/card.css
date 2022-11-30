@@ -39,11 +39,11 @@ div.card {
   text-align: center;
   display: block;
   font-size: calc(10 * var(--magic, 0.1px));
-  height: 9.5em;
+  height: calc(100 * var(--magic, 0.1em) - 0.5em);
   display: inline-block;
   padding: 0.25em;
   color: #292418;
-  border-radius: calc(3s * var(--magic));
+  border-radius: calc(3 * var(--magic));
   --card-rem: calc(10*var(--magic,0.1px));
 }
 div.card .card-title {
