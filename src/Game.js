@@ -12,7 +12,7 @@ import { toHaveDisplayValue } from "@testing-library/jest-dom/dist/matchers";
 export default class Game extends React.Component {
 
 	// static cardTemplate = require("./cardTemplate.json");
-	static LoadCardPack = function (url) {
+	static LoadCardPack = function (url, last = true) {
 		fetch("./" + url).then(data1 => data1.json().then(data => {
 			data.forEach(thing => {
 				Game.Cards[Game.Cards.length] = thing;
@@ -27,9 +27,20 @@ export default class Game extends React.Component {
 			});
 			console.log("loaded cardpack: " + url);
 			console.log(Game.Cards);
+			Game.state.loaded = true;
+			if(last === true){
+				var curr = Game.loadedcallbacks.pop();
+				while (curr !== undefined){
+					console.log(curr?.constructor?.name ?? "idk");
+					curr();
+					curr = Game.loadedcallbacks.pop();
+				}
+			}
 		}));
 	}
 	static Cards = [];
+	static state = {loaded: false};
+	static loadedcallbacks = [];
 
 
 	constructor() {
@@ -37,6 +48,7 @@ export default class Game extends React.Component {
 
 		this.state = {};
 		this.state.cardholders = [null,null,null,null,null,null,null,null];
+		this.state.loaded = false;
 
 		this.CardholderProps = [
 			{type: "table", owner: 0},
@@ -52,7 +64,7 @@ export default class Game extends React.Component {
 		//"hand": the cards in the hand
 		this.turn = 0;
 
-		this.playerData = [{name:"blue"}, {name:"red"}];
+		this.playerData = [{name:"You"}, {name:"Enemy"}];
 		// const testdeck = ["wolf","rattle snek","leech","snek","bunny","elephant","leviathan pup","bison","puppy","venom","Squirrel","goat","sheep","vampirism","spider","fox"];
 		// const testdeck = ["wolf","rattle snek","leech","snek","bunny","elephant","leviathan pup","bison","puppy","Squirrel","goat","sheep","spider","fox"];
 		const testdeck = ["wolf","rattle snek","leech","leech","snek","snek","bunny","bison","puppy","Squirrel","Squirrel","goat","sheep","spider","spider","fox"];
@@ -71,11 +83,29 @@ export default class Game extends React.Component {
 
 		this.hasTriggeredFunFeature = false;
 		
-		this.playerHealth = [20,20];
+		this.playerHealth = [12,12];
 		
-		this.enemyCardCount = 30;
+		this.enemyCardCount = 10;
+
+		
+		function whenLoaded(){
+			for (let i = 0; i < 5 ; i++){
+				this.drawcard({},this);
+			}
+			this.setState({loaded: true});
+		}
+		this.init(whenLoaded);
 	}
 
+	init(func_y){
+
+		if (Game.state.loaded === false){
+			Game.loadedcallbacks.push(func_y.bind(this));
+		}else{
+			func_y();
+		}
+
+	}
 
 //#######################
 //#                     #
@@ -479,6 +509,7 @@ export default class Game extends React.Component {
 		let id = crypto.randomUUID();
 		let index = Game.Cards.findIndex(iscard => iscard.name === name);
 		let cardObj = Game.Cards[index];
+		
 		this.titles[id] = name;
 		// this.titles[id] = cardObj.name;
 		this.health[id] = cardObj.health;
@@ -594,6 +625,18 @@ export default class Game extends React.Component {
 	}
 
 	render() {
+
+		if (this.state.loaded === false){
+			return(
+				<div className="game">
+					<h1>
+						loading...
+					</h1>
+				</div>
+			);
+		}
+
+
 		let providecontext = { cards: this.state.cardholders, movecard: ((a, b) => this.movecard(a, b, this)) };
 		this.sanitychecker();
 
@@ -621,31 +664,34 @@ export default class Game extends React.Component {
 		// this.playerData = [{name:"blue"}, {name:"red"}];
 		let turnPlayerName = this.playerData[this.turn].name;
 		let health = this.playerHealth[0];
+		let cardsremaining = this.enemyCardCount - this.decks[1].getDrawnCards();
 
 		return (
 			<div className="game">
-				<div className="left">
-					<h1>Health: {health}</h1>
-					<h1>Turn: {turnPlayerName}</h1>
+				{/* <div className="left">
+					
 					<h1>bell</h1>
 					<button onClick={() => this.testInit()}>place test Cards for opponent</button>
 					<button onClick={() => this.testInit2()}>place test Cards2</button>
 					<button onClick={() => this.handleTurn(this.turn)}>end {turnPlayerName}'s turn</button>
-				</div>
+				</div> */}
 				<gamecontext.Provider value={this.getContextValue()}>
 					<div className="center">
 						<div className="top">
-							<Cardrow data={locations.hand1}  owner={1} type={"hand"}/>
+							{/* <Cardrow data={locations.hand1}  owner={1} type={"hand"}/> */}
+							<h1>Enemy Cards Remaining {cardsremaining}</h1>
 							<Cardrow data={locations.table1} owner={1} type={"table"}/>
 						</div>
 						<div className="bottom">
 							<Cardrow data={locations.table0} owner={0} type={"table"}/>
 							<Cardrow data={locations.hand0}  owner={0} type={"hand"}/>
+							<h1>Health: {health}</h1>
 						</div>
 					</div>
 				</gamecontext.Provider>
 				<div className="right">
-					<button onClick={e => this.drawcard(e, this)}>draw card tester</button>
+					<h1>Turn: {turnPlayerName}</h1>
+					{/* <button onClick={e => this.drawcard(e, this)}>draw card tester</button> */}
 					<button onClick={e => this.passTurnbutton(e, this)}>end turn</button>
 				</div>
 			</div>
