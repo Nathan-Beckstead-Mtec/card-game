@@ -36,6 +36,58 @@ https://lospec.com/palette-list/vinik24
 .left, .right {
   flex-basis: 20%;
 }
+.left button, .right button {
+  all: unset;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 2em;
+  font-family: "paint-number", monospace;
+  transition: color 1s ease-in, text-shadow 1s linear;
+  cursor: pointer;
+}
+.left button a, .right button a {
+  color: unset;
+  text-decoration: none;
+}
+.left button:hover, .right button:hover {
+  color: #a53030;
+  transition: color 0.1s 0.1s ease-out, text-shadow 0.4s linear;
+  text-shadow: 0em 0.2em 0.1em #000;
+}
+
+.infobar {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  justify-content: space-evenly;
+  width: 100%;
+}
+.infobar button {
+  all: unset;
+  margin: 0;
+  padding: 0;
+  text-align: center;
+  font-size: 2em;
+  font-family: "paint-number", monospace;
+  transition: color 1s ease-in, text-shadow 1s linear;
+  cursor: pointer;
+}
+.infobar button a {
+  color: unset;
+  text-decoration: none;
+}
+.infobar button:hover {
+  color: #a53030;
+  transition: color 0.1s 0.1s ease-out, text-shadow 0.4s linear;
+  text-shadow: 0em 0.2em 0.1em #000;
+}
+.infobar h1 {
+  font-family: "paint-number", monospace;
+  text-align: center;
+  margin: 0.5em 0;
+  color: #a53030;
+}
 
 .top, .bottom {
   display: flex;
@@ -49,7 +101,7 @@ https://lospec.com/palette-list/vinik24
 }
 
 .center {
-  max-width: 60vh;
+  max-width: 80vh;
   flex-basis: 60%;
   flex-grow: 1;
   width: 60%;
@@ -60,11 +112,6 @@ https://lospec.com/palette-list/vinik24
   display: flex;
   flex-direction: column;
   flex-wrap: nowrap;
-}
-.center h1 {
-  text-align: center;
-  margin: 0.5em 0;
-  color: #a53030;
 }
 .center .Cardrow[type=table] {
   width: 100%;

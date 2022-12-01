@@ -26,7 +26,73 @@
 }
 .left, .right{
     flex-basis: 20%;
+
+
+    button {
+        all:unset;
+
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        font-size: 2em;
+        font-family: "paint-number",monospace;
+        transition: color 1s ease-in, text-shadow 1s linear;
+        a{
+            color:unset;
+            text-decoration: none;
+        }
+        cursor:pointer;
+    }
+    button:hover{
+        color:col.$paperRed;
+        
+        transition:color 0.1s 0.1s ease-out, text-shadow 0.4s linear;
+        text-shadow: 0em 0.2em 0.1em #000;
+    }
+
+
 }
+
+.infobar{
+
+
+    display:flex;
+    flex-direction: row;
+    flex-wrap: nowrap;
+    justify-content: space-evenly;
+    width:100%;
+
+    button {
+        all:unset;
+
+        margin: 0;
+        padding: 0;
+        text-align: center;
+        font-size: 2em;
+        font-family: "paint-number",monospace;
+        transition: color 1s ease-in, text-shadow 1s linear;
+        a{
+            color:unset;
+            text-decoration: none;
+        }
+        cursor:pointer;
+    }
+    button:hover{
+        color:col.$paperRed;
+        
+        transition:color 0.1s 0.1s ease-out, text-shadow 0.4s linear;
+        text-shadow: 0em 0.2em 0.1em #000;
+    }
+    h1{
+        font-family: "paint-number",monospace;
+        text-align: center;
+        margin: 0.5em 0;
+        color: col.$paperRed;
+    }
+}
+
+
+
 
 .top, .bottom{
     display: flex;
@@ -41,7 +107,7 @@
 
 
 .center{
-    max-width: 60vh;
+    max-width: 80vh;
     flex-basis: 60%;
     flex-grow: 1;
     // overflow-y: scroll;
@@ -57,11 +123,7 @@
 
 
 
-    h1{
-        text-align: center;
-        margin: 0.5em 0;
-        color: col.$paperRed;
-    }
+    
 
     .Cardrow[type="table"]{
         

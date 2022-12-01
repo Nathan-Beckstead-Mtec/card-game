@@ -72,6 +72,8 @@ div.card{
     display:inline-block;
     padding:$edge;
 
+    cursor:grab;
+
     // font-family: "selected", monospace;
     color: col.$paperBlack;
 

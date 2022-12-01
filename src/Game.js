@@ -85,24 +85,31 @@ export default class Game extends React.Component {
 		
 		this.playerHealth = [12,12];
 		
-		this.enemyCardCount = 10;
+		this.enemyCardCount = 15;
+		this.willPlacedFirstCards = false;
+	}
 
-		
+	componentDidMount(){
 		function whenLoaded(){
 			for (let i = 0; i < 5 ; i++){
 				this.drawcard({},this);
 			}
 			this.setState({loaded: true});
 		}
-		this.init(whenLoaded);
+		if (this.willPlacedFirstCards === false){
+			this.init(whenLoaded);
+			this.willPlacedFirstCards = true;
+		}
+
 	}
+
 
 	init(func_y){
 
 		if (Game.state.loaded === false){
 			Game.loadedcallbacks.push(func_y.bind(this));
 		}else{
-			func_y();
+			func_y.bind(this)();
 		}
 
 	}
@@ -233,6 +240,10 @@ export default class Game extends React.Component {
 	damagePlayer(player, ammount, fromId = null){
 		//OUCH!
 
+		if(ammount === 0){
+			return;
+		}
+
 		console.info(this.titles[fromId] + "(" + fromId + ") attacked player " + player + " aka " +this.playerData[player].name + " for " + ammount + " damage.");
 
 		if(player == 1){
@@ -355,6 +366,7 @@ export default class Game extends React.Component {
 					//no alive cards
 					alert("You Won!\n\n");
 				}
+				finish(e,this); //callback
 			} else{
 				//still got cards
 				let openindicies = mycards.filter(curr => curr.id === null);
@@ -375,6 +387,9 @@ export default class Game extends React.Component {
 					let placeCardIndex = canidates[Randint256() % canidates.length].index; //technically has skew when has 3 cards to chose from (bc 256 % 3 != 0)
 					console.log("index: " + placeCardIndex);
 					this.placeNewCard(this.defineNewCard(this.decks[1].draw()),placeCardIndex, () => finish(e,this));
+				}else{
+					//callback
+					finish(e,this);
 				}
 			}
 
@@ -616,6 +631,12 @@ export default class Game extends React.Component {
 			console.assert(countOfthisKey == 1, {key, name: this.titles[key] ,countOfthisKey, errorMsg: (countOfthisKey > 1 ? "this card is in multiple card holders at the same time" : "this card is not in a card holder" ) });
 			console.assert(this.health[key] > 0, {key, name: this.titles[key] , health: this.health[key], errorMsg: "this card shouuld be dead"});
 		});
+		this.state.cardholders.forEach(curr => {
+			if (curr === null){
+				return;
+			}
+			console.assert(this.titles[curr] !== undefined, {id: curr, errorMsg: "this card is in a cardholder but no data is defined"});
+		});
 		if(this.state.cardholders.length != this.CardholderProps.length){
 			setTimeout(() => console.assert(this.state.cardholders.length == this.CardholderProps.length, {errorMsg: "length of cardholders and cardholderprops are not equal"}),
 			500);
@@ -668,31 +689,35 @@ export default class Game extends React.Component {
 
 		return (
 			<div className="game">
-				{/* <div className="left">
+				<div className="left">
 					
-					<h1>bell</h1>
-					<button onClick={() => this.testInit()}>place test Cards for opponent</button>
-					<button onClick={() => this.testInit2()}>place test Cards2</button>
-					<button onClick={() => this.handleTurn(this.turn)}>end {turnPlayerName}'s turn</button>
-				</div> */}
+					{/* <h1>bell</h1> */}
+					{/* <button onClick={() => this.testInit()}>place test Cards for opponent</button> */}
+					{/* <button onClick={() => this.testInit2()}>place test Cards2</button> */}
+					{/* <button onClick={() => this.handleTurn(this.turn)}>end {turnPlayerName}'s turn</button> */}
+				</div>
 				<gamecontext.Provider value={this.getContextValue()}>
 					<div className="center">
 						<div className="top">
 							{/* <Cardrow data={locations.hand1}  owner={1} type={"hand"}/> */}
-							<h1>Enemy Cards Remaining {cardsremaining}</h1>
+							<div className="infobar">
+								<h1>Enemy Cards Remaining {cardsremaining}</h1>
+							</div>
 							<Cardrow data={locations.table1} owner={1} type={"table"}/>
 						</div>
 						<div className="bottom">
 							<Cardrow data={locations.table0} owner={0} type={"table"}/>
 							<Cardrow data={locations.hand0}  owner={0} type={"hand"}/>
-							<h1>Health: {health}</h1>
+							<div className="infobar">
+								<h1>Health: {health}</h1>
+								<button onClick={e => this.passTurnbutton(e, this)}>end turn</button>
+							</div>
 						</div>
 					</div>
 				</gamecontext.Provider>
 				<div className="right">
-					<h1>Turn: {turnPlayerName}</h1>
-					{/* <button onClick={e => this.drawcard(e, this)}>draw card tester</button> */}
-					<button onClick={e => this.passTurnbutton(e, this)}>end turn</button>
+					{/* <h1>Turn: {turnPlayerName}</h1> */}
+					<button style={{display: "none"}} onClick={e => this.drawcard(e, this)}>draw card tester</button>
 				</div>
 			</div>
 		);

@@ -3,27 +3,35 @@ router:
 title page
 	a card game that happens to look alot like <a>Inscryption</a>
 	now with 97% less features than the -only- competitor!
-
+about page
 win screen
 all cards
 play with drag and drop
 	bunnies and squrills
 
-change decks to not spawn op cards
+!change decks to not spawn op cards
 
 add counter for enemy "cards remaining"
 	init at 2 * deck.length
 
 
-end trun button on the right:
+!end trun button on the right:
 	endturn
 	summon new card
 	end turn()
 
-
+poison number
 
 !make a fake card
 
 !kill card holders from moved hand
 
 !health
+
+
+
+
+
+
+
+wants.some(you => you.fuk)
