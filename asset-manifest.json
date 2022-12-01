@@ -1,18 +1,18 @@
 {
   "files": {
     "main.css": "/card-game/static/css/main.e4b4bb7d.css",
-    "main.js": "/card-game/static/js/main.7d6d82ee.js",
+    "main.js": "/card-game/static/js/main.c5f7baf9.js",
     "static/js/787.6b390ee9.chunk.js": "/card-game/static/js/787.6b390ee9.chunk.js",
     "static/media/pexels-szabó-viktor-3227984.jpg": "/card-game/static/media/pexels-szabó-viktor-3227984.af62cfbfbc53ceda9253.jpg",
     "static/media/PAINP___.TTF": "/card-game/static/media/PAINP___.2546a7fad5f64c9761c1.TTF",
     "static/media/edo.ttf": "/card-game/static/media/edo.86e748280292fb2633af.ttf",
     "index.html": "/card-game/index.html",
     "main.e4b4bb7d.css.map": "/card-game/static/css/main.e4b4bb7d.css.map",
-    "main.7d6d82ee.js.map": "/card-game/static/js/main.7d6d82ee.js.map",
+    "main.c5f7baf9.js.map": "/card-game/static/js/main.c5f7baf9.js.map",
     "787.6b390ee9.chunk.js.map": "/card-game/static/js/787.6b390ee9.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.e4b4bb7d.css",
-    "static/js/main.7d6d82ee.js"
+    "static/js/main.c5f7baf9.js"
   ]
 }
