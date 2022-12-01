@@ -6,6 +6,7 @@ import { useContext } from "react"; //not needed if just providing context
 import Cardrow from "./Cardrow";
 
 import './css/game.css';
+import { toHaveDisplayValue } from "@testing-library/jest-dom/dist/matchers";
 
 
 export default class Game extends React.Component {
@@ -53,7 +54,8 @@ export default class Game extends React.Component {
 
 		this.playerData = [{name:"blue"}, {name:"red"}];
 		// const testdeck = ["wolf","rattle snek","leech","snek","bunny","elephant","leviathan pup","bison","puppy","venom","Squirrel","goat","sheep","vampirism","spider","fox"];
-		const testdeck = ["wolf","rattle snek","leech","snek","bunny","elephant","leviathan pup","bison","puppy","Squirrel","goat","sheep","spider","fox"];
+		// const testdeck = ["wolf","rattle snek","leech","snek","bunny","elephant","leviathan pup","bison","puppy","Squirrel","goat","sheep","spider","fox"];
+		const testdeck = ["wolf","rattle snek","leech","leech","snek","snek","bunny","bison","puppy","Squirrel","Squirrel","goat","sheep","spider","spider","fox"];
 		this.decks = [new deck(testdeck), new deck(testdeck)];
 
 
@@ -70,6 +72,8 @@ export default class Game extends React.Component {
 		this.hasTriggeredFunFeature = false;
 		
 		this.playerHealth = [20,20];
+		
+		this.enemyCardCount = 30;
 	}
 
 
@@ -83,12 +87,9 @@ export default class Game extends React.Component {
 		return this.state.cardholders.findIndex(curr => curr == id);
 	}
 
-	getTargetIndex(id){
-		//get card id then return the index of the target cards
-		
-
-		let index = this.getIndexFromId(id);
+	getTargetIndexFromIndex(index){
 		let props = this.CardholderProps[index];
+		let id = this.state.cardholders[index]; //for debug MSGs
 		if(props.type != "table"){
 			console.warn("a non-table card (id: " + id + ") called getTarget");
 			return null;
@@ -104,6 +105,11 @@ export default class Game extends React.Component {
 
 		return targetIndex;
 	}
+	getTargetIndex(id){
+		//get card id then return the index of the target cards
+		let index = this.getIndexFromId(id);
+		return this.getTargetIndexFromIndex(index);
+	}
 	getTargetId(id){
 		//get card id then return the id of the target cards
 		return this.state.cardholders[this.getTargetIndex(id)];
@@ -114,7 +120,7 @@ export default class Game extends React.Component {
 		//calls turnEndRunSigils() for each card owned by (player)
 		//rotate the gameboard
 		//toggle this.player
-
+		console.log("handle turn called");
 		let cardIds = this.state.cardholders.filter((curr,index) => {
 			const props = this.CardholderProps[index];
 			return (props.owner == player && props.type == "table");
@@ -124,7 +130,6 @@ export default class Game extends React.Component {
 		cardIds.forEach((cardId) => this.turnEndRunSigils(cardId));
 
 		this.turn = (this.turn + 1) % 2; //sketchy math go burrr (this ones not too bad)
-		this.forceUpdate();
 	}
 
 	turnAttack(id){
@@ -141,8 +146,8 @@ export default class Game extends React.Component {
 		let target = this.getTargetId(id);
 		let dmg = this.attac[id];
 		
-		if(target === null){
-			console.info(this.titles[id] + "(" + id + ") has no target. attacking player");
+		if(target === null || target === undefined){
+			console.debug(this.titles[id] + "(" + id + ") has no target (" + "). attacking player");
 			let owner = this.CardholderProps[this.getIndexFromId(id)].owner;
 			let targetPlayer = 1 - owner; //sketchy math if players > 2
 			this.damagePlayer(targetPlayer, dmg, id);
@@ -198,10 +203,10 @@ export default class Game extends React.Component {
 	damagePlayer(player, ammount, fromId = null){
 		//OUCH!
 
-		console.log(this.titles[fromId] + "(" + fromId + ") attacked player: " + this.playerData[player].name + " (" + player + ")");
+		console.info(this.titles[fromId] + "(" + fromId + ") attacked player " + player + " aka " +this.playerData[player].name + " for " + ammount + " damage.");
 
 		if(player == 1){
-			console.warn("LOL, this is (currently) a single player survival game the other guy can't take damage");
+			console.warn("LOL, this is (currently) a single player survival game, the other guy can't take damage");
 			return;
 		}
 
@@ -270,6 +275,97 @@ export default class Game extends React.Component {
 
 	}
 
+	passTurnbutton(e, thus){
+		console.info("end turn pressed here");
+		console.group("end turn");
+
+		e.target.disabled = true; //e = button clicked event
+
+		if (thus.turn != 0){
+			console.error("How did I get here?");
+			thus.handleTurn(thus.turn); //Returns to normal state?
+			return;
+		}
+
+		thus.handleTurn(0);
+
+		
+		let AI = (e, finish) => {
+			//enemy AI
+			//am I out of cards?
+			//yes
+				// do I still have cards alive?
+				//no
+					//win.exe
+				//(yes would just continue)
+			//no
+				//do I have room to place a cards (and get a list of avalible spaces to use in a randomizer later)
+				//mutate previous list to prefer placing cards infront of other cards (no cheep shots to player)
+				//place random card
+			console.group("AI");
+
+			function Randint256(){
+				let values = new Uint8Array(1);
+				window.crypto.getRandomValues(values);
+				return values[0];
+			}
+
+			let mycardindicies = Array.from(this.CardholderProps).map((curr,index) => ({keep:curr.type == "table" && curr.owner == 1, index: index})).filter(curr => curr.keep);
+			let mycards = mycardindicies.map(curr => ({id :this.state.cardholders[curr.index], index:curr.index}));
+
+			console.log("AI.mycardindicies:");
+			console.log(mycardindicies);
+			console.log("AI.mycards:");
+			console.log(mycards);
+
+			if (this.decks[1].getDrawnCards() >= this.enemyCardCount){
+				//out of cards
+				console.log("out of cards");
+				if(! mycards.some(curr => curr.id !== null)){
+					//no alive cards
+					alert("You Won!\n\n");
+				}
+			} else{
+				//still got cards
+				let openindicies = mycards.filter(curr => curr.id === null);
+				if(openindicies.length > 0){
+					//empty space for card (I can place a card)
+					console.log("have cards and space for one");
+
+					let canidates;
+					let preferedIndicies = openindicies.filter(curr => null !== this.state.cardholders[this.getTargetIndexFromIndex(curr.index)]) //prefer cards with a opposing card
+					if (preferedIndicies.length > 0){
+						canidates = preferedIndicies;
+						console.log("using prefered indicies");
+					} else{
+						canidates = openindicies;
+						console.log("using backup indicies");
+					}
+
+					let placeCardIndex = canidates[Randint256() % canidates.length].index; //technically has skew when has 3 cards to chose from (bc 256 % 3 != 0)
+					console.log("index: " + placeCardIndex);
+					this.placeNewCard(this.defineNewCard(this.decks[1].draw()),placeCardIndex, () => finish(e,this));
+				}
+			}
+
+			console.groupEnd("AI");
+		}
+		AI = AI.bind(thus,e,finish);
+		AI();
+
+		function finish(e,thus){
+
+			thus.handleTurn(1);
+
+			console.assert(thus.turn == 0);
+			thus.drawcard(e,thus);
+
+			e.target.disabled = false;
+			console.groupEnd("end turn");
+			thus.forceUpdate();
+		}
+		console.log("done, it's all async now");
+	}
 
 //#####################
 //#                   #
@@ -358,7 +454,7 @@ export default class Game extends React.Component {
 	}
 
 
-	placeNewCard(id, index) {
+	placeNewCard(id, index, callback = () => {}) {
 		if (this.state.cardholders[index] === undefined) {
 			console.error("cannot place card: (id: " + id + ", name: " + this.titles[id] + ") in undefined");
 			console.log(this.state.cardholders);
@@ -374,7 +470,7 @@ export default class Game extends React.Component {
 			let current = Array.from(curr.cardholders);
 			current[index] = id;
 			return {cardholders: current};
-		});
+		}, callback);
 	}
 
 
@@ -550,6 +646,7 @@ export default class Game extends React.Component {
 				</gamecontext.Provider>
 				<div className="right">
 					<button onClick={e => this.drawcard(e, this)}>draw card tester</button>
+					<button onClick={e => this.passTurnbutton(e, this)}>end turn</button>
 				</div>
 			</div>
 		);
@@ -576,10 +673,12 @@ Game.LoadCardPack("./cardPack.json");
 
 class deck{
 	#currentbag;
+	#drawncards;
 
 	constructor(deck){
 		this.#currentbag = [];
 		this.deck = Array.from(deck);
+		this.#drawncards = 0;
 	}
 	peek(count = 1){
 		if(count <= 0){
@@ -595,7 +694,12 @@ class deck{
 	}
 	draw(){
 		this.#ensuretop();
+		this.#drawncards++;
 		return this.#currentbag.shift();
+	}
+
+	getDrawnCards(){
+		return this.#drawncards;
 	}
 
 	#ensuretop(num = 1){
