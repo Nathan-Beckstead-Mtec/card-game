@@ -1,0 +1,20 @@
+{
+  "short_name": "card game",
+  "name": "A card game that happens to look alot like Inscryption",
+  "icons": [
+    {
+      "src": "favicon.ico",
+      "sizes": "64x64 32x32 24x24 16x16",
+      "type": "image/x-icon"
+    },
+    {
+      "src": "logo256.png",
+      "type": "image/png",
+      "sizes": "256x256"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#a53030",
+  "background_color": "#524839"
+}
